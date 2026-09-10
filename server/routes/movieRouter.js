@@ -6,7 +6,7 @@ const router = Router();
 
 // GET /moives/now-playing
 // Fetches movies that are currently playing in theaters from the TMDB API and returns the data as JSON.
-router.get("/now-playing", async (req, res) => {
+router.get("/now-playing", async (req, res, next) => {
     try {
         const response = await axios.get('https://api.themoviedb.org/3/movie/now_playing', {
             headers: {
