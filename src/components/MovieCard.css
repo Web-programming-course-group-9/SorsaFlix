@@ -1,0 +1,18 @@
+.movie-card {
+  width: 180px;
+}
+
+.movie-poster {
+  width: 180px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.movie-title {
+  font-size: 18px;
+}
+
+.movie-rating {
+  margin-top: 5px;
+}
