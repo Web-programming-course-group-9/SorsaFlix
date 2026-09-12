@@ -1,0 +1,25 @@
+.movies-page {
+  padding: 40px;
+}
+
+.movies-page h1 {
+  text-align: center;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.movies-grid .movie-card {
+  width: 100%;
+}
+
+.movies-grid .movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
