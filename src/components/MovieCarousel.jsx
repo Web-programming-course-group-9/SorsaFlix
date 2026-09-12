@@ -5,6 +5,7 @@ function MovieCarousel() {
   const carouselRef = useRef(null);
 
   const [movies, setMovies] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -35,22 +36,30 @@ function MovieCarousel() {
     const carousel = carouselRef.current;
     const item = carousel?.querySelector(".item");
 
-    if (carousel && item) {
-      carousel.scrollLeft += item.clientWidth + 25;
-    }
+    if (!carousel || !item) return;
+
+    carousel.scrollLeft += item.clientWidth + 25;
+
+    setActiveIndex((current) =>
+      Math.min(current + 1, movies.length - 1)
+    );
   };
 
   const scrollLeft = () => {
     const carousel = carouselRef.current;
     const item = carousel?.querySelector(".item");
 
-    if (carousel && item) {
-      carousel.scrollLeft -= item.clientWidth + 25;
-    }
+    if (!carousel || !item) return;
+
+    carousel.scrollLeft -= item.clientWidth + 25;
+
+    setActiveIndex((current) =>
+      Math.max(current - 1, 0)
+    );
   };
 
   if (loading) {
-    return <p className="carousel-message">Loading</p>;
+    return <p className="carousel-message">Loading movies...</p>;
   }
 
   if (error) {
@@ -58,7 +67,7 @@ function MovieCarousel() {
   }
 
   if (movies.length === 0) {
-    return <p className="carousel-message">Cannot find movies.</p>;
+    return <p className="carousel-message">No movies found.</p>;
   }
 
   return (
@@ -72,12 +81,14 @@ function MovieCarousel() {
         ‹
       </button>
 
-      <div
-        className="carousel"
-        ref={carouselRef}
-      >
-        {movies.map((movie) => (
-          <div className="item" key={movie.id}>
+      <div className="carousel" ref={carouselRef}>
+        {movies.map((movie, index) => (
+          <div
+            className={`item ${
+              index === activeIndex ? "active" : ""
+            }`}
+            key={movie.id}
+          >
             <MovieCard movie={movie} />
           </div>
         ))}

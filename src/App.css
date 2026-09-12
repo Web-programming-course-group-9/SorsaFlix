@@ -182,3 +182,147 @@
     border-right-color: var(--border);
   }
 }
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+}
+
+
+/* CAROUSEL */
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+
+  width: 100%;
+
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+
+  padding: 50px 80px;
+}
+
+
+/* MOVIE ITEM */
+
+.item {
+  flex: 0 0 180px;
+  width: 180px;
+
+  opacity: 0.6;
+
+  transform: scale(0.85);
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+
+  z-index: 1;
+}
+
+
+/* CENTER MOVIE */
+
+.item.active {
+  transform: scale(1.2);
+  opacity: 1;
+
+  z-index: 2;
+}
+
+
+/* MOVIE CARD */
+
+.movie-card {
+  width: 180px;
+}
+
+
+/* POSTER */
+
+.movie-poster {
+  width: 180px;
+  height: 270px;
+
+  object-fit: cover;
+
+  display: block;
+
+  border-radius: 8px;
+}
+
+
+/* MOVIE INFO */
+
+.movie-info {
+  margin-top: 10px;
+}
+
+.movie-title {
+  margin: 0;
+
+  font-size: 18px;
+}
+
+.movie-rating {
+  margin-top: 5px;
+}
+
+
+/* ARROWS */
+
+.left,
+.right {
+  position: absolute;
+
+  z-index: 10;
+
+  width: 45px;
+  height: 45px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.2);
+
+  color: white;
+
+  font-size: 35px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.2s ease;
+}
+
+
+.left {
+  left: 10px;
+}
+
+
+.right {
+  right: 10px;
+}
+
+
+.left:hover,
+.right:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+
+/* LOADING / ERROR */
+
+.carousel-message {
+  text-align: center;
+  margin: 40px;
+}
