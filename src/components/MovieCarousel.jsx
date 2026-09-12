@@ -3,23 +3,27 @@ import MovieCard from "./MovieCard";
 
 function MovieCarousel() {
   const carouselRef = useRef(null);
+
   const [movies, setMovies] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/now_playing?api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=fi-FI&region=FI&page=1`
-        );
+        const response = await fetch("/movies/now-playing");
+
+        if (!response.ok) {
+          throw new Error("Movie search failed");
+        }
 
         const data = await response.json();
 
-        setMovies(
-          data.results.filter((movie) => movie.poster_path)
-        );
+        setMovies(data.filter((movie) => movie.poster_path));
       } catch (error) {
-        console.error("Search failed:", error);
+        console.error(error);
+        setError("Downloading error");
       } finally {
         setLoading(false);
       }
@@ -30,24 +34,40 @@ function MovieCarousel() {
 
   const scrollRight = () => {
     const carousel = carouselRef.current;
-    const item = carousel.querySelector(".item");
+    const item = carousel?.querySelector(".item");
 
-    if (item) {
-      carousel.scrollLeft += item.clientWidth;
-    }
+    if (!carousel || !item) return;
+
+    carousel.scrollLeft += item.clientWidth + 25;
+
+    setActiveIndex((current) =>
+      Math.min(current + 1, movies.length - 1)
+    );
   };
 
   const scrollLeft = () => {
     const carousel = carouselRef.current;
-    const item = carousel.querySelector(".item");
+    const item = carousel?.querySelector(".item");
 
-    if (item) {
-      carousel.scrollLeft -= item.clientWidth;
-    }
+    if (!carousel || !item) return;
+
+    carousel.scrollLeft -= item.clientWidth + 25;
+
+    setActiveIndex((current) =>
+      Math.max(current - 1, 0)
+    );
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="carousel-message">Loading movies...</p>;
+  }
+
+  if (error) {
+    return <p className="carousel-message">{error}</p>;
+  }
+
+  if (movies.length === 0) {
+    return <p className="carousel-message">No movies found.</p>;
   }
 
   return (
@@ -56,17 +76,19 @@ function MovieCarousel() {
       <button
         className="left"
         onClick={scrollLeft}
-        aria-label="reverse"
+        aria-label="Previous movie"
       >
         ‹
       </button>
 
-      <div
-        className="carousel"
-        ref={carouselRef}
-      >
-        {movies.map((movie) => (
-          <div className="item" key={movie.id}>
+      <div className="carousel" ref={carouselRef}>
+        {movies.map((movie, index) => (
+          <div
+            className={`item ${
+              index === activeIndex ? "active" : ""
+            }`}
+            key={movie.id}
+          >
             <MovieCard movie={movie} />
           </div>
         ))}
@@ -75,7 +97,7 @@ function MovieCarousel() {
       <button
         className="right"
         onClick={scrollRight}
-        aria-label="Next"
+        aria-label="Next movie"
       >
         ›
       </button>
