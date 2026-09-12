@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import MovieCard from "../components/MovieCard";
 import "./Movies.css";
 
@@ -10,15 +11,11 @@ function Movies() {
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await fetch("/movies/now-playing");
+        const response = await axios.get("/movies/now-playing");
 
-        if (!response.ok) {
-          throw new Error("Failed to load movies");
-        }
-
-        const data = await response.json();
-
-        setMovies(data.filter((movie) => movie.poster_path));
+        setMovies(
+          response.data.filter((movie) => movie.poster_path)
+        );
       } catch (error) {
         console.error(error);
         setError("Failed to load movies.");
