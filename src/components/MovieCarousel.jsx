@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import MovieCard from "./MovieCard";
 
 function MovieCarousel() {
@@ -12,18 +13,14 @@ function MovieCarousel() {
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await fetch("/movies/now-playing");
+        const response = await axios.get("/movies/now-playing");
 
-        if (!response.ok) {
-          throw new Error("Movie search failed");
-        }
-
-        const data = await response.json();
-
-        setMovies(data.filter((movie) => movie.poster_path));
+        setMovies(
+          response.data.filter((movie) => movie.poster_path)
+        );
       } catch (error) {
         console.error(error);
-        setError("Downloading error");
+        setError("Failed to load movies.");
       } finally {
         setLoading(false);
       }
@@ -72,7 +69,6 @@ function MovieCarousel() {
 
   return (
     <div className="carousel-wrapper">
-
       <button
         className="left"
         onClick={scrollLeft}
@@ -101,7 +97,6 @@ function MovieCarousel() {
       >
         ›
       </button>
-
     </div>
   );
 }
