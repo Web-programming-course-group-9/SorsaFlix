@@ -1,18 +1,63 @@
-import SearchResults from "../components/SearchResults";
-
-// Temporary test data — replace with real search results in #23.
-const testMovies = [
-  { id: 1, title: "Batman Begins", poster_path: "/8RW2runSEc34IwKN2D1aPcJd2UL.jpg" },
-  { id: 2, title: "The Dark Knight", poster_path: "/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
-  { id: 3, title: "The Batman", poster_path: "/74xTEgt7R36Fpooo50r9T25onhq.jpg" },
-];
+import { useEffect, useState } from "react";
+import axios from "../api/axios";
+import MovieCard from "../components/MovieCard";
+import "./Movies.css";
 
 function Movies() {
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        const response = await axios.get("/now-playing");
+
+        setMovies(
+          response.data.filter((movie) => movie.poster_path)
+        );
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load movies.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMovies();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="movies-page">
+        <h1>Movies</h1>
+        <p>Loading movies...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="movies-page">
+        <h1>Movies</h1>
+        <p>{error}</p>
+      </main>
+    );
+  }
+
   return (
-    <div>
+    <main className="movies-page">
       <h1>Movies</h1>
-      <SearchResults movies={testMovies} />
-    </div>
+
+      <div className="movies-grid">
+        {movies.map((movie) => (
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+          />
+        ))}
+      </div>
+    </main>
   );
 }
 
