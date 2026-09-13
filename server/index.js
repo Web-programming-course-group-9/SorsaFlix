@@ -2,8 +2,13 @@
 
 import express from "express";
 import movieRouter from "./routes/movieRouter.js";
+import authRouter from "./authRouter.js";
+
+
 
 const app = express();
+app.use(express.json());
+app.use("/auth", authRouter);
 
 // Read port from environment variable or default to 3000
 const PORT = process.env.PORT || 3000;
