@@ -1,27 +1,29 @@
 //Basic Express server setup
 
-import express from "express";
-import movieRouter from "./routes/movieRouter.js";
-import authRouter from "./authRouter.js";
+import express from "express"
+import cors from "cors"
+import movieRouter from "./routes/movieRouter.js"
+import authRouter from "./authRouter.js"
 
 
 
-const app = express();
-app.use(express.json());
-app.use("/auth", authRouter);
+const app = express()
+app.use(cors()) // Enable CORS for all routes
+app.use(express.json())
+app.use("/auth", authRouter)
 
 // Read port from environment variable or default to 3000
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 
 // Test route to check if the server is running
 app.get("/", (req, res) => {
-    res.send("server is running");
-    });
+    res.send("server is running")
+    })
 
 // All movie routes are handled under /movies
-app.use("/movies", movieRouter);
+app.use("/movies", movieRouter)
 
 // Start the server and listen on the port
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+    console.log(`Server is running on port ${PORT}`)
+})

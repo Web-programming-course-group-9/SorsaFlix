@@ -3,7 +3,7 @@ function Series() {
     <main className="page">
       <h1>Series</h1>
     </main>
-  );
+  )
 }
 
-export default Series;
+export default Series

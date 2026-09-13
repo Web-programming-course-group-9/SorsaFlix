@@ -1,70 +1,70 @@
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import MovieCard from "./MovieCard";
+import { useEffect, useRef, useState } from "react"
+import axios from "axios"
+import MovieCard from "./MovieCard"
 
 function MovieCarousel() {
-  const carouselRef = useRef(null);
+  const carouselRef = useRef(null)
 
-  const [movies, setMovies] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [movies, setMovies] = useState([])
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await axios.get("/movies/now-playing");
+        const response = await axios.get("/movies/now-playing")
 
         setMovies(
           response.data.filter((movie) => movie.poster_path)
         );
       } catch (error) {
-        console.error(error);
-        setError("Failed to load movies.");
+        console.error(error)
+        setError("Failed to load movies.")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
-    fetchMovies();
-  }, []);
+    fetchMovies()
+  }, [])
 
   const scrollRight = () => {
-    const carousel = carouselRef.current;
-    const item = carousel?.querySelector(".item");
+    const carousel = carouselRef.current
+    const item = carousel?.querySelector(".item")
 
-    if (!carousel || !item) return;
+    if (!carousel || !item) return
 
-    carousel.scrollLeft += item.clientWidth + 25;
+    carousel.scrollLeft += item.clientWidth + 25
 
     setActiveIndex((current) =>
       Math.min(current + 1, movies.length - 1)
-    );
-  };
+    )
+  }
 
   const scrollLeft = () => {
     const carousel = carouselRef.current;
-    const item = carousel?.querySelector(".item");
+    const item = carousel?.querySelector(".item")
 
-    if (!carousel || !item) return;
+    if (!carousel || !item) return
 
-    carousel.scrollLeft -= item.clientWidth + 25;
+    carousel.scrollLeft -= item.clientWidth + 25
 
     setActiveIndex((current) =>
       Math.max(current - 1, 0)
-    );
-  };
+    )
+  }
 
   if (loading) {
-    return <p className="carousel-message">Loading movies...</p>;
+    return <p className="carousel-message">Loading movies...</p>
   }
 
   if (error) {
-    return <p className="carousel-message">{error}</p>;
+    return <p className="carousel-message">{error}</p>
   }
 
   if (movies.length === 0) {
-    return <p className="carousel-message">No movies found.</p>;
+    return <p className="carousel-message">No movies found.</p>
   }
 
   return (
@@ -98,7 +98,7 @@ function MovieCarousel() {
         ›
       </button>
     </div>
-  );
+  )
 }
 
 export default MovieCarousel;
