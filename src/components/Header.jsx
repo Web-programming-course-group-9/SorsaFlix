@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
-import logo from "../assets/logo.svg";
-import moviesButton from "../assets/moviesButton.svg";
-import seriesButton from "../assets/seriesButton.svg";
-import groupsButton from "../assets/groupsButton.svg";
-import reviewsButton from "../assets/reviewsButton.svg";
-import loginButton from "../assets/loginButton.svg";
+import logo from "../assets/logo.svg"
+import moviesButton from "../assets/moviesButton.svg"
+import seriesButton from "../assets/seriesButton.svg"
+import groupsButton from "../assets/groupsButton.svg"
+import reviewsButton from "../assets/reviewsButton.svg"
+import loginButton from "../assets/loginButton.svg"
 
 function Header() {
   return (
@@ -59,7 +59,7 @@ function Header() {
       </nav>
 
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header
