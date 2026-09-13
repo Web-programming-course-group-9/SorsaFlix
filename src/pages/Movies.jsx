@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import MovieCard from "../components/MovieCard";
 import "./Movies.css";
 
@@ -11,7 +11,7 @@ function Movies() {
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await axios.get("/movies/now-playing");
+        const response = await axios.get("/now-playing");
 
         setMovies(
           response.data.filter((movie) => movie.poster_path)
