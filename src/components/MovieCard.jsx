@@ -1,15 +1,35 @@
-// Shows one movie card with title, poster
-// Receives a movie data as a prop; does not fetch data itself
-function MovieCard({ movie }) {
-    // TMDB returns only the path to the poster image, so we need to prepend the base URL
-    const posterUrl = "https://image.tmdb.org/t/p/w200" + movie.poster_path;
+import "./MovieCard.css";
 
-    return (
-        <div>
-            <img src={posterUrl} alt={movie.title} />
-            <p>{movie.title}</p>
-        </div>
-    );
+function MovieCard({ movie }) {
+  const posterUrl = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : null;
+
+  return (
+    <article className="movie-card">
+
+      {posterUrl && (
+        <img
+          className="movie-poster"
+          src={posterUrl}
+          alt={movie.title}
+        />
+      )}
+
+      <div className="movie-info">
+
+        <h2 className="movie-title">
+          {movie.title}
+        </h2>
+
+        <p className="movie-rating">
+           {movie.vote_average?.toFixed(1)}
+        </p>
+
+      </div>
+
+    </article>
+  );
 }
 
-export default MovieCard
+export default MovieCard;
