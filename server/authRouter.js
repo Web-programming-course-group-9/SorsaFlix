@@ -8,7 +8,7 @@ router.post("/register", async (req, res, next) => {
     try {
         const { username, email, password } = req.body
         if (!username || !email || !password) {
-            return res.status(400).json({ error: "Kaikki kentät vaaditaan" });
+            return res.status(400).json({ error: "Kaikki kentät vaaditaan" })
         }
 
         const passwordRules = /^(?=.*[A-Z])(?=.*\d).{8,}$/
@@ -19,9 +19,9 @@ router.post("/register", async (req, res, next) => {
         }
 
 
-        const existing = await pool.query("SELECT id FROM users WHERE email = $1 OR username = $2", [email, username]);
+        const existing = await pool.query("SELECT id FROM users WHERE email = $1 OR username = $2", [email, username])
         if (existing.rows.length > 0) {
-            return res.status(409).json({ error: "Sähköposti tai käyttäjänimi on jo käytössä" });
+            return res.status(409).json({ error: "Sähköposti tai käyttäjänimi on jo käytössä" })
         }
 
         const passwordHash = await bcrypt.hash(password, 10)
@@ -36,4 +36,4 @@ router.post("/register", async (req, res, next) => {
     }
 })
 
-export default router;
+export default router

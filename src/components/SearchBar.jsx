@@ -1,82 +1,33 @@
-import { useState } from "react";
+import { useState } from "react"
 
-function SearchBar() {
-  const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
+// Search form: an input field + button
+// Captures what the user types and passes it to the paren via onSearch
+function SearchBar({ onSearch }) {
+    // Holds current text in the input field
+    const [searchTerm, setSearchTerm] = useState("")
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-
-    if (!query.trim()) {
-      return;
+    // Update the searchTerm state when the user types in the input field
+    const handleInputChange = (event) => {
+        setSearchTerm(event.target.value)
     }
 
-    try {
-      setLoading(true);
-
-      const response = await fetch(
-        `/movies/search?query=${encodeURIComponent(query)}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Search failed");
-      }
-
-      const data = await response.json();
-
-      setMovies(data);
-    } catch (error) {
-      console.error("Search error:", error);
-    } finally {
-      setLoading(false);
+    // Handle form submission
+    const handleSubmit = (event) => {
+        event.preventDefault() // Prevent page reload
+        onSearch(searchTerm) // pass the typed term to the parent
     }
-  };
-
-  return (
-    <div className="search-container">
-
-      <form
-        className="search-form"
-        onSubmit={handleSearch}
-      >
-        <input
-          type="text"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search movies..."
-          className="search-input"
-        />
-
-        <button
-          type="submit"
-          className="search-button"
-        >
-          Search
-        </button>
-      </form>
-
-      {loading && (
-        <p>Searching...</p>
-      )}
-
-      {movies.length > 0 && (
-        <div className="search-results">
-
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="search-result"
-            >
-              {movie.title}
-            </div>
-          ))}
-
-        </div>
-      )}
-
-    </div>
-  );
+  
+    return (
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleInputChange}
+            />
+            <button type="submit">Search</button>
+        </form>
+    )
 }
 
-export default SearchBar;
+export default SearchBar

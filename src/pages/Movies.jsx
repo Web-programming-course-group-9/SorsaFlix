@@ -1,31 +1,31 @@
-import { useEffect, useState } from "react";
-import axios from "../api/axios";
-import MovieCard from "../components/MovieCard";
-import "./Movies.css";
+import { useEffect, useState } from "react"
+import axios from "../api/axios"
+import MovieCard from "../components/MovieCard"
+import "./Movies.css"
 
 function Movies() {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [movies, setMovies] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     async function fetchMovies() {
       try {
-        const response = await axios.get("/now-playing");
+        const response = await axios.get("/now-playing")
 
         setMovies(
           response.data.filter((movie) => movie.poster_path)
-        );
+        )
       } catch (error) {
-        console.error(error);
-        setError("Failed to load movies.");
+        console.error(error)
+        setError("Failed to load movies.")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
-    fetchMovies();
-  }, []);
+    fetchMovies()
+  }, [])
 
   if (loading) {
     return (
@@ -42,7 +42,7 @@ function Movies() {
         <h1>Movies</h1>
         <p>{error}</p>
       </main>
-    );
+    )
   }
 
   return (
@@ -58,7 +58,7 @@ function Movies() {
         ))}
       </div>
     </main>
-  );
+  )
 }
 
 export default Movies;
