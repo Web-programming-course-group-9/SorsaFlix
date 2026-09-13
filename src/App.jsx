@@ -11,6 +11,8 @@ import Series from './pages/Series'
 import Groups from './pages/Groups'
 import Reviews from './pages/Reviews'
 import Login from './pages/Login'
+import Register from './pages/Register'
+
 
 
 function App() {
@@ -28,6 +30,7 @@ function App() {
           <Route path="/groups" element={<Groups />} />
           <Route path="/reviews" element={<Reviews />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
 
