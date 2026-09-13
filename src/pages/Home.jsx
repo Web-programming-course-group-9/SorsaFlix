@@ -10,15 +10,18 @@ function Home() {
 
   // Runs when the user submits a search term
   // Receives the search term from the SearchBar component
-  const handleSearch = async (searchTerm) => {
+  const handleSearch = async (searchValues) => {
     // Ignore empty searches
-    if (!searchTerm.trim()) {
+    if (!searchValues.query.trim()) {
       return
     }
     try {
       // Calls GET http://localhost:3000/movies/search?query=<searchTerm>
       const response = await api.get("/search", {
-        params: { query: searchTerm },
+        params: { 
+          query: searchValues.query,
+          year: searchValues.year || undefined,
+        },
       })
       setSearchResults(response.data)
     } catch (error) {
