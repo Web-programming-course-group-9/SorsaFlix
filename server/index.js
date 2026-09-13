@@ -1,14 +1,12 @@
 //Basic Express server setup
 
 import express from "express"
-import cors from "cors"
 import movieRouter from "./routes/movieRouter.js"
 import authRouter from "./authRouter.js"
-
-
+import cors from "cors"
 
 const app = express()
-app.use(cors()) // Enable CORS for all routes
+app.use(cors({ origin: "http://localhost:5173" }))
 app.use(express.json())
 app.use("/auth", authRouter)
 

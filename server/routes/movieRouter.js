@@ -27,10 +27,10 @@ router.get("/now-playing", async (req, res, next) => {
 // GET /movies/search?query=...
 // Searches TMDB for movies matching the given query string.
 router.get("/search", async (req, res, next) => {
-    const { query } = req.query
+    const { query, year } = req.query
 
     if (!query || !query.trim()) {
-        return res.status(400).json({ error: "Query parameter 'query' is required" });
+        return res.status(400).json({ error: "Query parameter 'query' is required" })
     }
 
     try {
@@ -42,12 +42,13 @@ router.get("/search", async (req, res, next) => {
                 query,
                 region: "FI",
                 language: "fi-FI",
-            },
+                primary_release_year: year || undefined,
+            }
         });
         res.status(200).json(response.data.results)
     } catch (error) {
         next(error)
     }
-});
+})
 
 export default router

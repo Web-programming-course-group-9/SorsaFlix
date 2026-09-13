@@ -24,16 +24,16 @@ router.post("/register", async (req, res, next) => {
             return res.status(409).json({ error: "Sähköposti tai käyttäjänimi on jo käytössä" })
         }
 
-        const passwordHash = await bcrypt.hash(password, 10);
+        const passwordHash = await bcrypt.hash(password, 10)
         const result = await pool.query(
             "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at",
             [username, email, passwordHash]
         );
 
-        res.status(201).json(result.rows[0]);
+        res.status(201).json(result.rows[0])
     } catch (error) {
         next(error)
     }
-});
+})
 
 export default router
