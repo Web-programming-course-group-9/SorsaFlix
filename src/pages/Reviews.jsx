@@ -3,7 +3,7 @@ function Reviews() {
     <main className="page">
       <h1>Reviews</h1>
     </main>
-  );
+  )
 }
 
-export default Reviews;
+export default Reviews
