@@ -27,6 +27,7 @@ function App() {
         <Route path="/groups" element={<Groups />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
