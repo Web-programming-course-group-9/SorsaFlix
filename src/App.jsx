@@ -2,18 +2,18 @@ import {
   BrowserRouter,
   Routes,
   Route,
-} from "react-router-dom";
+} from "react-router-dom"
 
-import Header from "./components/Header";
+import Header from "./components/Header"
 
-import Home from "./pages/Home";
-import Movies from "./pages/Movies";
-import Series from "./pages/Series";
-import Groups from "./pages/Groups";
-import Reviews from "./pages/Reviews";
-import Login from "./pages/Login";
+import Home from "./pages/Home"
+import Movies from "./pages/Movies"
+import Series from "./pages/Series"
+import Groups from "./pages/Groups"
+import Reviews from "./pages/Reviews"
+import Login from "./pages/Login"
 
-import "./App.css";
+import "./App.css"
 
 function App() {
   return (
@@ -27,10 +27,9 @@ function App() {
         <Route path="/groups" element={<Groups />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

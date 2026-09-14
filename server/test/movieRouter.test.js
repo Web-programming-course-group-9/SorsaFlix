@@ -23,6 +23,7 @@ describe('Movie Routes', () => {
         //The response should be an array of movies
         expect(data).to.be.an('array')
     })
+
     //Test movie search with missing query parameter
     it('should return 400 when query parameter is missing', async () => {
         const res = await fetch('http://localhost:3000/movies/search')
@@ -32,5 +33,13 @@ describe('Movie Routes', () => {
         expect(res.status).to.equal(400)
         //The error response should contain an error message
         expect(data).to.have.property('error')
+    })
+    //Testing empty year parameter field
+    it('should return results when year parameter is an empty string', async () => {
+        const res = await fetch('http://localhost:3000/movies/search?query=terminator&year=')
+        const data = await res.json()
+
+        expect(res.status).to.equal(200)
+        expect(data).to.be.an('array')
     })
 })
