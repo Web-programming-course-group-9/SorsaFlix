@@ -12,7 +12,7 @@ import Series from "./pages/Series"
 import Groups from "./pages/Groups"
 import Reviews from "./pages/Reviews"
 import Login from "./pages/Login"
-
+import Register from './pages/Register'
 import "./App.css"
 
 function App() {
