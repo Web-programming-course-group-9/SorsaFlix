@@ -16,7 +16,7 @@ router.get("/now-playing", async (req, res, next) => {
                 region: "FI",
                 language: "fi-FI",
             },
-        });
+        })
     // send TMDB movie list back to the client as JSON
     res.status(200).json(response.data.results)
     } catch (error) {
@@ -44,7 +44,7 @@ router.get("/search", async (req, res, next) => {
                 language: "fi-FI",
                 primary_release_year: year || undefined,
             }
-        });
+        })
         res.status(200).json(response.data.results)
     } catch (error) {
         next(error)
