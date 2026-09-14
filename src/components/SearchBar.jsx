@@ -5,16 +5,22 @@ import { useState } from "react"
 function SearchBar({ onSearch }) {
     // Holds current text in the input field
     const [searchTerm, setSearchTerm] = useState("")
+    // Holds current text in the year field
+    const [year, setYear] = useState("")
 
     // Update the searchTerm state when the user types in the input field
     const handleInputChange = (event) => {
         setSearchTerm(event.target.value)
     }
 
+    const handleYearChange = (event) => {
+        setYear(event.target.value)
+    }
+
     // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault() // Prevent page reload
-        onSearch(searchTerm) // pass the typed term to the parent
+        onSearch({ query: searchTerm, year: year }) // pass the typed term to the parent
     }
   
     return (
@@ -24,6 +30,12 @@ function SearchBar({ onSearch }) {
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleInputChange}
+            />
+            <input
+                type="text"
+                placeholder="Year..."
+                value={year}
+                onChange={handleYearChange}
             />
             <button type="submit">Search</button>
         </form>
