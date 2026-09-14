@@ -3,7 +3,7 @@ import "./MovieCard.css"
 function MovieCard({ movie }) {
   const posterUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    : null;
+    : null
 
   return (
     <article className="movie-card">
@@ -29,7 +29,7 @@ function MovieCard({ movie }) {
       </div>
 
     </article>
-  );
+  )
 }
 
-export default MovieCard;
+export default MovieCard

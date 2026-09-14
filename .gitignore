@@ -37,3 +37,6 @@ Thumbs.db
 
 .env.local
 .env.*.local
+
+# Local-only docs, not ready to share yet
+docs/authentication.md
