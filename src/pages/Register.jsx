@@ -16,34 +16,34 @@ function Register() {
       await authApi.post("/register", { username, email, password })
       navigate("/login")
     } catch (err) {
-      setError(err.response?.data?.error ?? "Rekisteröinti epäonnistui")
+      setError(err.response?.data?.error ?? "Registration failed")
     }
   }
 
   return (
     <main className="page">
-      <h1>Rekisteröidy</h1>
+      <h1>Sign up</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Käyttäjänimi"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="email"
-          placeholder="Sähköposti"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          placeholder="Salasana"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <p className="error">{error}</p>}
-        <button type="submit">Rekisteröidy</button>
+        <button type="submit">Sign up</button>
       </form>
     </main>
   )
