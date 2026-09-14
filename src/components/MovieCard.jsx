@@ -1,4 +1,4 @@
-import "./MovieCard.css";
+import "./MovieCard.css"
 
 function MovieCard({ movie }) {
   const posterUrl = movie.poster_path
