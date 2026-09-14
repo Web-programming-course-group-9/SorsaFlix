@@ -4,7 +4,7 @@ function Login() {
   return (
     <main className="page">
       <h1>Log in</h1>
-      <Link to="/register">Ei tiliä? Rekisteröidy</Link>
+      <Link to="/register">Don't have an account? Sign up</Link>
     </main>
   )
 }
