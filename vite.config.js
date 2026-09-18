@@ -16,6 +16,10 @@ export default defineConfig({
         target: 'http://backend:3000',
         changeOrigin: true,
       },
+      '/series': {
+        target: 'http://backend:3000',
+        changeOrigin: true,
+      }
     },
   },
 })
