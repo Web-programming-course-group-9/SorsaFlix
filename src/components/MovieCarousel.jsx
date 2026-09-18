@@ -17,7 +17,7 @@ function MovieCarousel() {
 
         setMovies(
           response.data.filter((movie) => movie.poster_path)
-        );
+        )
       } catch (error) {
         console.error(error)
         setError("Failed to load movies.")
@@ -43,7 +43,7 @@ function MovieCarousel() {
   }
 
   const scrollLeft = () => {
-    const carousel = carouselRef.current;
+    const carousel = carouselRef.current
     const item = carousel?.querySelector(".item")
 
     if (!carousel || !item) return
@@ -101,4 +101,4 @@ function MovieCarousel() {
   )
 }
 
-export default MovieCarousel;
+export default MovieCarousel

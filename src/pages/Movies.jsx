@@ -33,7 +33,7 @@ function Movies() {
         <h1>Movies</h1>
         <p>Loading movies...</p>
       </main>
-    );
+    )
   }
 
   if (error) {
@@ -61,4 +61,4 @@ function Movies() {
   )
 }
 
-export default Movies;
+export default Movies

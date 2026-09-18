@@ -9,7 +9,7 @@ function SearchResults({ results }) {
                 <MovieCard key={movie.id} movie={movie} />
             ))}
         </div>
-    );
+    )
 }
 
 export default SearchResults
