@@ -18,7 +18,7 @@ export default defineConfig({
       },
       '/series': {
         target: 'http://backend:3000',
-        changeOrigin: true,
+        changeOrigin: true
       }
     },
   },
