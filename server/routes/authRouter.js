@@ -74,7 +74,18 @@ router.post("/login", async (req, res, next) => {
 
 router.delete("/account", requireAuth, async (req, res, next) => {
     try {
-        res.status(200).json({ message: "Delete route is implemented" })
+        // User id from the verifeid token
+        const userId = req.user.id
+
+        // Delete user; CASCADE will handle related data in other tables if set up
+        const result = await pool.query("DELETE FROM users WHERE id = $1", [userId])
+        
+        // no row deleted = user was not found
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        res.status(200).json({ message: "Account deleted successfully" })
     } catch (error) {
         next(error)
     }
