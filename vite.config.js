@@ -12,6 +12,10 @@ export default defineConfig({
         target: 'http://backend:3000',
         changeOrigin: true,
       },
+      '/auth': {
+        target: 'http://backend:3000',
+        changeOrigin: true,
+      },
     },
   },
 })
