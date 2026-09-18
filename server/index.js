@@ -6,7 +6,24 @@ import authRouter from "./authRouter.js"
 import cors from "cors"
 
 const app = express()
-app.use(cors({ origin: "http://localhost:5173" }))
+
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map(origin => origin.trim())
+    .filter(origin => origin.length > 0)
+
+app.use(cors({
+    origin: (requestOrigin, callback) => {
+        if (!requestOrigin || allowedOrigins.includes(requestOrigin)) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    }
+}))    
+
+
+//app.use(cors({ origin: "http://localhost:5173" }))
 app.use(express.json())
 app.use("/auth", authRouter)
 
@@ -24,4 +41,6 @@ app.use("/movies", movieRouter)
 // Start the server and listen on the port
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
+    console.log(`Allowed CORS origins: ${allowedOrigins.join(", ")}`)
 })
+   
