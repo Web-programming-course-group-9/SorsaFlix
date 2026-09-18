@@ -3,6 +3,7 @@
 import express from "express"
 import movieRouter from "./routes/movieRouter.js"
 import authRouter from "./authRouter.js"
+import serieRouter from "./routes/serieRouter.js"
 import cors from "cors"
 
 const app = express()
@@ -37,6 +38,9 @@ app.get("/", (req, res) => {
 
 // All movie routes are handled under /movies
 app.use("/movies", movieRouter)
+
+// All serie routes are handled under /series
+app.use("/series", serieRouter)
 
 // Start the server and listen on the port
 app.listen(PORT, () => {
