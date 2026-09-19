@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from "../api/axios"
+import axios from "axios"
 import MovieCard from "../components/MovieCard"
 import "./Movies.css"
 
@@ -17,7 +17,7 @@ function Movies() {
         setError("")
 
         const response = await axios.get(
-          `/${sortBy}?page=${page}`
+          `movies/${sortBy}?page=${page}`
         )
 
         setMovies(

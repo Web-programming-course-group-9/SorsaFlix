@@ -2,7 +2,7 @@
 
 import express from "express"
 import movieRouter from "./routes/movieRouter.js"
-import authRouter from "./authRouter.js"
+import authRouter from "./routes/authRouter.js"
 import serieRouter from "./routes/serieRouter.js"
 import cors from "cors"
 
