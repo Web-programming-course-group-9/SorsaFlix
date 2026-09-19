@@ -67,12 +67,29 @@ router.post("/login", async (req, res, next) => {
         if (!passwordMatches) {
             return res.status(401).json({ error: "Invalid email or password" })
         }
-
-        const token = jwt.sign(
-            { id: user.id, username: user.username },
+        //Access token 
+        const accessToken = jwt.sign(
+            {id: user.id, username: user.username},
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            {expiresIn: ACCESS_TOKEN_EXPIRES_IN}
         )
+
+        const {token: refresToken, tokenHash} = generateRefreshToken()
+        const expiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN_MS)
+        //Insert the token into db
+        await pool.query(
+            "INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)",
+            [user.id, tokenHash, expiresAt]
+        )
+
+        //save token into a cookie
+        res.cookie("refreshToken", refresToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",//place holder for production environments
+            sameSite: "strict",
+            path: "/auth",
+            maxAge: REFRESH_TOKEN_EXPIRES_IN_MS
+        })
 
         res.status(200).json({
             token,
