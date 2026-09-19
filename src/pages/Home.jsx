@@ -1,5 +1,5 @@
 import { useState } from "react"
-import api from "../api/axios"
+import axios from "axios"
 import SearchBar from "../components/SearchBar"
 import SearchResults from "../components/SearchResults"
 import MovieCarousel from "../components/MovieCarousel"
@@ -15,9 +15,11 @@ function Home() {
     if (!searchValues.query.trim()) {
       return
     }
+
+      // Choose the endpoint based on the selected type: movie
+      const basePath = searchValues.type === "tv" ? "/series/search" : "/movies/search"
     try {
-      // Calls GET http://localhost:3000/movies/search?query=<searchTerm>
-      const response = await api.get("/search", {
+      const response = await axios.get(basePath, {
         params: { 
           query: searchValues.query,
           year: searchValues.year || undefined,
