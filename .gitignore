@@ -40,5 +40,6 @@ Thumbs.db
 
 # Local-only docs, not ready to share yet
 docs/authentication.mdcookies.txt
+docs/authentication.md
 
 cookies.txt
