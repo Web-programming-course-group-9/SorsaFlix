@@ -3,8 +3,19 @@ import bcrypt from "bcrypt"
 import { pool } from "../db/index.js"
 import jwt from "jsonwebtoken"
 import requireAuth from "../middleware/auth.js"
+import crypto from "crypto"
 
 const router = Router()
+
+//Refresh and access token expiration settings
+const ACCESS_TOKEN_EXPIRES_IN = "15m"
+const REFRESH_TOKEN_EXPIRES_IN_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
+
+function generateRefreshToken(){
+    const token = crypto.randomBytes(64).toString("hex") // creates random token
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex")
+    return {token, tokenHash}
+}
 
 router.post("/register", async (req, res, next) => {
     try {
