@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import authApi from "../api/authApi"
+import axios from "axios"
 
 function DeleteAccountButton() {
     const navigate = useNavigate()
@@ -14,7 +14,7 @@ function DeleteAccountButton() {
 
         try {
             // call backend DELETE route with token
-            await authApi.delete("/account", {
+            await axios.delete("/auth/account", {
                 headers: {
                     Authorization: 'Bearer ' + token
                 }
