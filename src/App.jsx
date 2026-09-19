@@ -13,6 +13,7 @@ import Groups from "./pages/Groups"
 import Reviews from "./pages/Reviews"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import Search from "./pages/Search"
 
 import "./App.css"
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </BrowserRouter>
   )
