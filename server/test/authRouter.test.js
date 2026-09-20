@@ -1,6 +1,9 @@
 import { expect } from 'chai'
 import { pool } from "../db/index.js"
 
+//For register, login and logout tests you must point out to the correct database DATABASE_URL in
+//a .env file in ./server/.env, without that the tests will fail on some parts since these use direct db functionality to
+//remove db entries for test users
 
 //Function that deletes test user by email. we use this after each test
 async function deleteUserByEmail(email) {
@@ -17,7 +20,7 @@ describe('Register', () => {
     }
 
     //Cleanup after the test is done, removes testusers
-    after(async() => {
+    after(async () => {
         await deleteUserByEmail(testUser.email)
         //await deleteUserByEmail('weakpassword@example.com')
         //await deleteUserByEmail('missingfields@example.com')
@@ -83,10 +86,110 @@ describe('Register', () => {
 })
 
 
+//Login tests 
+describe('Login', () => {
+
+    //Define test user for login testing
+    const testUser = {
+        username: 'logintestuser',
+        email: 'logintest@example.com',
+        password: 'Testpassword1'
+    }
+
+    // Create the user once before all tests in this block, since every
+    // test here needs the same already-registered user to log in with
+    before(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+
+    it('should return 200 and a token when credentials are correct', async () => {
+        const res = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const data = await res.json()
+
+        expect(res.status).to.equal(200)
+        expect(data).to.have.property('token')
+        expect(data.user).to.have.property('email', testUser.email)
+    })
+
+    it('should return 401 when password is incorrect', async () => {
+        const res = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: 'WrongPassword1'
+            })
+        })
+        expect(res.status).to.equal(401)
+    })
+
+    it('should return 400 when password is missing', async () => {
+        const res = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email
+            })
+        })
+        expect(res.status).to.equal(400)
+    })
+
+})
+
+
+//Logout testing
+describe('Logout', () => {
+
+
+    const testUser = {
+        username: 'logouttestuser',
+        email: 'logouttest@example.com',
+        password: 'Testpassword1'
+    }
+    //Creating a test user before running the tests
+    before(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+    //Cleanup test users after tests are done
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
 
 
 
+    
 
+})
 
 
 
@@ -141,7 +244,8 @@ describe('Account Deletion', () => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+ loginData.token }
+                'Authorization': 'Bearer ' + loginData.token
+            }
         })
         expect(res.status).to.equal(200)
     })
