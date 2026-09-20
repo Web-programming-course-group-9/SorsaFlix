@@ -22,8 +22,8 @@ describe('Register', () => {
     //Cleanup after the test is done, removes testusers
     after(async () => {
         await deleteUserByEmail(testUser.email)
-        //await deleteUserByEmail('weakpassword@example.com')
-        //await deleteUserByEmail('missingfields@example.com')
+        await deleteUserByEmail('weakpassword@example.com')
+        await deleteUserByEmail('missingfields@example.com')
     })
 
     it('it should return 201 and the created user when registration data is valid', async () => {
@@ -185,10 +185,53 @@ describe('Logout', () => {
         await deleteUserByEmail(testUser.email)
     })
 
+    //Log in to get a cookie function
+    async function loginAndGetCookie() {
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const setCookieHeader = loginRes.headers.get('set-cookie')
+        return setCookieHeader.split(';')[0]
+    }
+
+    it('should return 204 when a valid refresh token cookie is provided', async () => {
+        const cookie = await loginAndGetCookie()
+
+        const res = await fetch('http://localhost:3000/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+        expect(res.status).to.equal(204)
+    })
 
 
-    
+    it('should invalidate the refresh token so it can no longer be used', async () => {
+        const cookie = await loginAndGetCookie()
 
+        await fetch('http://localhost:3000/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+
+        const refreshRes = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+        expect(refreshRes.status).to.equal(401)
+    })
 })
 
 
