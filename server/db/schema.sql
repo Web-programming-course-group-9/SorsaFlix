@@ -28,6 +28,24 @@ CREATE TABLE IF NOT EXISTS public.users
 );
 
 -- -------------------------------------------------------------
+-- refresh tokens: long-lived tokens used to issue new access
+-- tokens without forcing the user to log in again
+
+-- We store a hash of the token never the token itself. This way
+-- even if the database gets leaked, stolen rows couldnt
+-- be used as valid refresh tokens
+CREATE TABLE IF NOT EXISTS public.refresh_tokens
+(
+    id serial,
+    user_id integer NOT NULL REFERENCES public.users (id) ON DELETE CASCADE,
+    token_hash character varying(64) NOT NULL,
+    expires_at timestamp with time zone NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
+    PRIMARY KEY (id),
+    UNIQUE (token_hash)
+);
+
+-- -------------------------------------------------------------
 -- groups: user-created groups
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.groups
@@ -107,6 +125,7 @@ CREATE TABLE IF NOT EXISTS public.reviews
 -- these speed up lookups such as "all reviews by this user" or
 -- "all members of this group".
 -- -------------------------------------------------------------
+CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id on public.refresh_tokens(user_id);
 CREATE INDEX IF NOT EXISTS idx_groups_owner_id        ON public.groups(owner_id);
 CREATE INDEX IF NOT EXISTS idx_group_members_group_id ON public.group_members(group_id);
 CREATE INDEX IF NOT EXISTS idx_group_members_user_id  ON public.group_members(user_id);
