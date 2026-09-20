@@ -1,0 +1,60 @@
+/* Header.css — styles for the user name + dropdown menu */
+
+
+/* Lay the nav items in one row, vertically centered */
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Anchor for the dropdown, and keep the menu inline with the nav images */
+.user-menu {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Username styled like a nav button (sits where the login image was) */
+.user-menu > button {
+  font: inherit;
+  color: #fff;
+  background: #2b4a63;   /* dark blue to match the nav bar — adjust hex if needed */
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  cursor: pointer;
+  position: relative;
+  top: -4px;
+}
+
+/* Dropdown floats below the name, does not push the layout */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Both "Log out" and "Delete Account" buttons inside the dropdown */
+.dropdown button {
+  font: inherit;
+  text-align: left;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: var(--text-h);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dropdown button:hover {
+  background: var(--accent-bg);
+}
