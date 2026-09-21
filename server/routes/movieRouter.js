@@ -126,5 +126,40 @@ router.get("/search", async (req, res, next) => {
     }
 })
 
+router.get("/by-genre", async (req, res, next) => {
+  try {
+    const genre = Number(req.query.genre)
+    const page = Number(req.query.page) || 1
+
+    if (!genre) {
+      return res.status(400).json({
+        error: "Genre is required"
+      })
+    }
+
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/discover/movie",
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+        },
+        params: {
+          language: "fi-FI",
+          region: "FI",
+          with_genres: genre,
+          page,
+        },
+      }
+    )
+
+    res.status(200).json({
+      results: response.data.results,
+      page: response.data.page,
+      total_pages: response.data.total_pages,
+    })
+  } catch (error) {
+    next(error)
+  }
+})
 
 export default router
