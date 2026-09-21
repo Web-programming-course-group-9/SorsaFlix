@@ -102,4 +102,32 @@ router.get("/on-the-air", async (req, res, next) => {
   }
 })
 
+// Get seriesby search query
+router.get("/search", async (req, res, next) => {
+    const { query, year } = req.query
+    const page = Number(req.query.page) || 1
+
+    if (!query || !query.trim()) {
+      return res.status(400).json({ error: "Query parameter 'query' is required" })
+    }
+
+    try {
+      const response = await axios.get('https://api.themoviedb.org/3/search/tv', {
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_TOKEN}`
+        },
+        params: {
+          query,
+          language: "fi-FI",
+          first_air_date_year: year || undefined,
+          page,
+        },
+      })
+
+      res.status(200).json(response.data.results)
+    } catch (error) {
+      next(error)
+    }
+  })
+
 export default router

@@ -2,9 +2,10 @@
 
 import express from "express"
 import movieRouter from "./routes/movieRouter.js"
-import authRouter from "./authRouter.js"
+import authRouter from "./routes/authRouter.js"
 import serieRouter from "./routes/serieRouter.js"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
@@ -20,11 +21,12 @@ app.use(cors({
         } else {
             callback(new Error("Not allowed by CORS"))
         }
-    }
+    },
+    credentials: true
 }))    
 
 
-//app.use(cors({ origin: "http://localhost:5173" }))
+app.use(cookieParser())
 app.use(express.json())
 app.use("/auth", authRouter)
 

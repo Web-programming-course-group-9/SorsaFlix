@@ -7,6 +7,8 @@ function SearchBar({ onSearch }) {
     const [searchTerm, setSearchTerm] = useState("")
     // Holds current text in the year field
     const [year, setYear] = useState("")
+    // Holds current search type (movie or tv)
+    const [searchType, setSearchType] = useState("movie")
 
     // Update the searchTerm state when the user types in the input field
     const handleInputChange = (event) => {
@@ -20,7 +22,7 @@ function SearchBar({ onSearch }) {
     // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault() // Prevent page reload
-        onSearch({ query: searchTerm, year: year }) // pass the typed term to the parent
+        onSearch({ query: searchTerm, year: year, type: searchType }) // pass the typed term to the parent
     }
   
     return (
@@ -37,6 +39,10 @@ function SearchBar({ onSearch }) {
                 value={year}
                 onChange={handleYearChange}
             />
+            <select value={searchType} onChange={(event) => setSearchType(event.target.value)}>
+                <option value="movie">Movies</option>
+                <option value="tv">Series</option>
+            </select>
             <button type="submit">Search</button>
         </form>
     )
