@@ -4,6 +4,7 @@ import express from "express"
 import movieRouter from "./routes/movieRouter.js"
 import authRouter from "./routes/authRouter.js"
 import serieRouter from "./routes/serieRouter.js"
+import reviewRouter from "./routes/reviewRouter.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
@@ -43,6 +44,9 @@ app.use("/movies", movieRouter)
 
 // All serie routes are handled under /series
 app.use("/series", serieRouter)
+
+// ALL reviews routes are handled under /reviews
+app.use("/reviews", reviewRouter)
 
 // Start the server and listen on the port
 app.listen(PORT, () => {
