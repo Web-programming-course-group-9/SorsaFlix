@@ -4,37 +4,22 @@
 
 .groups-page h1 {
   text-align: center;
-  margin-bottom: 40px;
 }
 
 .groups-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  max-width: 1000px;
-  margin: 0 auto;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
 }
 
-.group-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 140px;
-  padding: 20px;
-  border-radius: 15px;
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  transition: transform 0.2s ease, background 0.2s ease;
+.groups-grid .movie-card {
+  width: 100%;
 }
 
-.group-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.group-card h2 {
-  margin: 0;
-  text-align: center;
-  color: white;
+.groups-grid .movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
 }
