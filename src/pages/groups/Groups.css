@@ -1,0 +1,40 @@
+.groups-page {
+  padding: 40px;
+}
+
+.groups-page h1 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.group-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 140px;
+  padding: 20px;
+  border-radius: 15px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.group-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.group-card h2 {
+  margin: 0;
+  text-align: center;
+  color: white;
+}

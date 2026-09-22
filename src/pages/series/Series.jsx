@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import MovieCard from "../components/MovieCard"
+import MovieCard from "../../components/MovieCard"
 import "./Series.css"
 
 function Series() {
