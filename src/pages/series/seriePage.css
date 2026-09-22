@@ -1,0 +1,100 @@
+/* Whole page: dark background, readable text, centered column */
+.serie-page {
+  background-color: #0f0f0f;
+  color: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* Banner wrapper — the backdrop sits here, title is placed on top */
+.serie-banner {
+  position: relative;
+}
+
+/* Backdrop image fills the width, fixed height, cropped nicely */
+.serie-backdrop {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Dark gradient over the backdrop so the title stays readable.
+   It sits between the image and the title. */
+.serie-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(15, 15, 15, 0.9) 0%,
+    rgba(15, 15, 15, 0.3) 60%,
+    rgba(15, 15, 15, 0) 100%
+  );
+}
+
+/* Title on top of the banner, bottom-left, above the gradient */
+.serie-banner-title {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  z-index: 1;
+  font-size: 3rem;
+  margin: 0;
+}
+
+/* Content row: poster + info side by side */
+.serie-content {
+  display: flex;
+  gap: 30px;
+  padding: 30px 40px;
+}
+
+/* Info column: keep text left-aligned */
+.serie-info {
+    text-align: left;
+}
+
+/* Poster fixed width so it doesn't stretch */
+.serie-poster-large {
+  width: 250px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Meta line (year · runtime · rating) */
+.serie-meta {
+  color: #cccccc;
+  font-size: 1rem;
+}
+
+/* Genres in a lighter grey */
+.serie-genres {
+  color: #999999;
+}
+
+/* Overview text, easier to read with some line height */
+.serie-overview {
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+/* Cast section spacing */
+.serie-cast-section {
+  padding: 0 40px;
+}
+
+/* Cast as a clean grid, not a bullet list */
+.serie-cast {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.serie-cast li {
+  background-color: #1a1a1a;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
