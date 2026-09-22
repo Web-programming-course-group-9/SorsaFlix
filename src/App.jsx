@@ -7,9 +7,9 @@ import {
 import Header from "./components/Header"
 
 import Home from "./pages/Home"
-import Movies from "./pages/Movies"
-import Series from "./pages/Series"
-import Groups from "./pages/Groups"
+import Movies from "./pages/movies/Movies"
+import Series from "./pages/series/Series"
+import Groups from "./pages/groups/Groups"
 import Reviews from "./pages/Reviews"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
