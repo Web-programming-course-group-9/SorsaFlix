@@ -5,11 +5,6 @@ import DeleteAccountButton from "./DeleteAccountButton"
 import "./Header.css"
 
 import logo from "../assets/logo.svg"
-import moviesButton from "../assets/moviesButton.svg"
-import seriesButton from "../assets/seriesButton.svg"
-import groupsButton from "../assets/groupsButton.svg"
-import reviewsButton from "../assets/reviewsButton.svg"
-import loginButton from "../assets/loginButton.svg"
 
 function Header() {
   // get login state (user) and logout function from AuthContext
@@ -23,71 +18,62 @@ function Header() {
     navigate("/")
   }
 
-  return (
-    <header className="header">
+return (
+  <header className="header">
 
-      <Link to="/" className="logo-link">
-        <img
-          className="logo"
-          src={logo}
-          alt="Sortsaflix"
-        />
+    <Link to="/" className="logo-link">
+      <img
+        className="logo"
+        src={logo}
+        alt="Sorsaflix"
+      />
+    </Link>
+
+    <nav className="header-nav">
+      <Link to="/movies" className="nav-button">
+        Movies
       </Link>
 
-      <nav className="navigation">
+      <Link to="/series" className="nav-button">
+        Series
+      </Link>
 
-        <Link to="/movies">
-          <img
-            src={moviesButton}
-            alt="Movies"
-          />
+      <Link to="/genres" className="nav-button">
+        Genres
+      </Link>
+
+      <Link to="/groups" className="nav-button">
+        Groups
+      </Link>
+
+      <Link to="/reviews" className="nav-button">
+        Reviews
+      </Link>
+
+      {user ? (
+        <div className="user-menu">
+          <button onClick={() => setMenuOpen(!menuOpen)}>
+            {user.username}
+          </button>
+
+          {menuOpen && (
+            <div className="dropdown">
+              <button onClick={handleLogout}>
+                Log out
+              </button>
+
+              <DeleteAccountButton />
+            </div>
+          )}
+        </div>
+      ) : (
+        <Link to="/login" className="nav-button">
+          Login
         </Link>
+      )}
+    </nav>
 
-        <Link to="/series">
-          <img
-            src={seriesButton}
-            alt="Series"
-          />
-        </Link>
-
-        <Link to="/groups">
-          <img
-            src={groupsButton}
-            alt="Groups"
-          />
-        </Link>
-
-        <Link to="/reviews">
-          <img
-            src={reviewsButton}
-            alt="Reviews"
-          />
-        </Link>
-        {user ? (
-          <div className="user-menu">
-            <button onClick={() => setMenuOpen(!menuOpen)}>
-              {user.username}
-            </button>
-
-            {menuOpen && (
-              <div className="dropdown">
-                <button onClick={handleLogout}>Log out</button>
-                <DeleteAccountButton />
-              </div>
-            )}
-          </div>
-        ) : (
-
-          <Link to="/login">
-            <img
-              src={loginButton}
-              alt="Log in"
-            />
-          </Link>
-        )}
-      </nav>
-
-    </header>
+  </header>
   )
 }
 

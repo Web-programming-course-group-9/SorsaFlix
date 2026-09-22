@@ -16,6 +16,7 @@ import Register from "./pages/Register"
 import Search from "./pages/Search"
 import Moviepage from "./pages/movies/Moviepage"
 import SeriePage from "./pages/series/seriePage"
+import Genres from "./pages/genres/Genres"
 
 import "./App.css"
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/series" element={<Series />} />
+        <Route path="/genres" element={<Genres />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
