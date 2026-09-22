@@ -14,6 +14,7 @@ import Reviews from "./pages/Reviews"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Search from "./pages/Search"
+import Moviepage from "./pages/movies/Moviepage"
 
 import "./App.css"
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/movie/:movieId" element={<Moviepage />} />
       </Routes>
     </BrowserRouter>
   )

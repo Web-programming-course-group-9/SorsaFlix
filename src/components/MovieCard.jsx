@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import "./MovieCard.css"
 
 function MovieCard({ movie }) {
@@ -6,30 +7,34 @@ function MovieCard({ movie }) {
     : null
 
   return (
-    <article className="movie-card">
+    // By clicking on the card, we want to go to the movie page for this movie
+    <Link to={`/movie/${movie.id}`} className="movie-card-link">
+      <article className="movie-card">
 
-      {posterUrl && (
-        <img
-          className="movie-poster"
-          src={posterUrl}
-          alt={movie.title}
-        />
-      )}
+        {posterUrl && (
+          <img
+            className="movie-poster"
+            src={posterUrl}
+            alt={movie.title}
+          />
+        )}
 
-      <div className="movie-info">
+        <div className="movie-info">
 
-        <h2 className="movie-title">
-          {movie.title}
-        </h2>
+          <h2 className="movie-title">
+            {movie.title}
+          </h2>
 
-        <p className="movie-rating">
-           {movie.vote_average?.toFixed(1)}
-        </p>
+          <p className="movie-rating">
+             {movie.vote_average?.toFixed(1)}
+          </p>
 
-      </div>
+        </div>
 
-    </article>
+      </article>
+    </Link>
   )
 }
 
 export default MovieCard
+
