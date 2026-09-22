@@ -15,6 +15,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Search from "./pages/Search"
 import Moviepage from "./pages/movies/Moviepage"
+import SeriePage from "./pages/series/seriePage"
 
 import "./App.css"
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
+        <Route path="/serie/:seriesId" element={<SeriePage />} />
       </Routes>
     </BrowserRouter>
   )

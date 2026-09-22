@@ -1,6 +1,7 @@
 import { Router } from "express"
 import axios from "axios"
 import "dotenv/config"
+import { fetchSerieById } from "../controller/serieController.js"
 
 const router = Router()
 
@@ -129,5 +130,8 @@ router.get("/search", async (req, res, next) => {
       next(error)
     }
   })
+
+// GET series by ID
+router.get("/:seriesId", fetchSerieById)
 
 export default router
