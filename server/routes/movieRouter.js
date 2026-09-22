@@ -1,6 +1,7 @@
 import { Router } from "express"
 import axios from "axios"
 import "dotenv/config"
+import { fetchMovieById } from "../controller/movieController.js"
 
 const router = Router()
 
@@ -161,5 +162,9 @@ router.get("/by-genre", async (req, res, next) => {
     next(error)
   }
 })
+
+// GET /movies/:movieId
+// Returns one movie's details by its TMDB id
+router.get("/:movieId", fetchMovieById)
 
 export default router
