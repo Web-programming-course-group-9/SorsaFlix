@@ -1,0 +1,22 @@
+/* --- Carousel hover/click behaviour --- */
+
+/* Non-active cards: no hover zoom, and not clickable.
+   pointer-events: none blocks clicks AND hover on them. */
+.carousel .item:not(.active) .movie-card-link {
+  pointer-events: none;
+}
+
+/* Non-active cards: kill the hover zoom even if hovered */
+.carousel .item:not(.active) .movie-poster {
+  transform: none;
+}
+
+/* Optional: dim the non-active cards so the active one stands out */
+.carousel .item:not(.active) {
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.carousel .item.active {
+  opacity: 1;
+}
