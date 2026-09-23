@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import MovieCard from "../../components/MovieCard"
+import SerieCard from "../../components/serieCard/SerieCard"
 import "./Series.css"
 
 function Series() {
@@ -82,12 +82,9 @@ function Series() {
 
       <div className="series-grid">
         {series.map((show) => (
-          <MovieCard
+          <SerieCard
             key={show.id}
-            movie={{
-              ...show,
-              title: show.name,
-            }}
+            serie={show}
           />
         ))}
       </div>
