@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import MovieCard from "./MovieCard"
+import "./MovieCarousel.css"
 
 function MovieCarousel() {
   const carouselRef = useRef(null)
