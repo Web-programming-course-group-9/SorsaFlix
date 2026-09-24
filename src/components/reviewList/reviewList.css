@@ -1,0 +1,49 @@
+/* Container for all review cards, stacked vertically */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* One review card */
+.review-item {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 16px 20px;
+  text-align: left;
+}
+
+/* Top row: username, date, rating spread across the width */
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Username stands out a bit */
+.review-author {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* Date in a muted grey */
+.review-date {
+  color: #999999;
+  font-size: 0.9rem;
+}
+
+/* Rating */
+.review-rating {
+  color: #ffd700;
+}
+
+/* Review text below the header */
+.review-text {
+  color: #dddddd;
+  line-height: 1.5;
+  margin: 0;
+}

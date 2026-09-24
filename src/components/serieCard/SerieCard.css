@@ -1,8 +1,8 @@
-.movie-card {
+.serie-card {
   width: 180px;
 }
 
-.movie-poster {
+.serie-poster {
   width: 180px;
   height: 270px;
   object-fit: cover;
@@ -10,19 +10,19 @@
   transition: transform 0.2s ease;
 }
 
-.movie-title {
+.serie-title {
   font-size: 18px;
 }
 
-.movie-rating {
+.serie-rating {
   margin-top: 5px;
 }
 
-.movie-card:hover .movie-poster {
+.serie-card:hover .serie-poster {
   transform: scale(1.2);
 }
 
-.movie-card-link {
+.serie-card-link {
   text-decoration: none;
   color: inherit;
 }
