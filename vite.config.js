@@ -21,8 +21,9 @@ export default defineConfig({
         changeOrigin: true
       },
       '/reviews': {
-       target: 'http://backend:3000',
-       changeOrigin: true
+        target: 'http://backend:3000',
+        changeOrigin: true
+      }
     },
   },
 }
