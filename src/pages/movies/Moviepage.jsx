@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import "./Moviepage.css"
 import ReviewForm from "../../components/ReviewForm"
+import ReviewList from "../../components/reviewList/reviewList.jsx"
 
 function MoviePage() {
     //get movieId from URL -> "/movie/550" -> movieId = 550
@@ -108,6 +109,12 @@ function MoviePage() {
 </div>
 
 <ReviewForm movieId={movieId} />
+
+      {/* Reviews */}
+      <div className="movie-reviews-section">
+        <h2>Reviews</h2>
+        <ReviewList movieId={movieId} />
+      </div>
 
     </main>
   )}
