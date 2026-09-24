@@ -2,6 +2,7 @@ import {useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import axios from "axios"
 import "./Moviepage.css"
+import ReviewForm from "../../components/ReviewForm"
 
 function MoviePage() {
     //get movieId from URL -> "/movie/550" -> movieId = 550
@@ -94,16 +95,19 @@ function MoviePage() {
       </div>
 
       {/* Cast list */}
-      <div className="movie-cast-section">
-        <h2>Cast</h2>
-        <ul className="movie-cast">
-          {cast.map(actor => (
-            <li key={actor.id}>
-              {actor.name} as {actor.character}
-            </li>
-          ))}
-        </ul>
-      </div>
+<div className="movie-cast-section">
+  <h2>Cast</h2>
+
+  <ul className="movie-cast">
+    {cast.map(actor => (
+      <li key={actor.id}>
+        {actor.name} as {actor.character}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<ReviewForm movieId={movieId} />
 
     </main>
   )}
