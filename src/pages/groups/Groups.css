@@ -1,0 +1,25 @@
+.groups-page {
+  padding: 40px;
+}
+
+.groups-page h1 {
+  text-align: center;
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.groups-grid .movie-card {
+  width: 100%;
+}
+
+.groups-grid .movie-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}

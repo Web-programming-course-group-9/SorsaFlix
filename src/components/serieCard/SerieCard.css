@@ -1,0 +1,28 @@
+.serie-card {
+  width: 180px;
+}
+
+.serie-poster {
+  width: 180px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.serie-title {
+  font-size: 18px;
+}
+
+.serie-rating {
+  margin-top: 5px;
+}
+
+.serie-card:hover .serie-poster {
+  transform: scale(1.2);
+}
+
+.serie-card-link {
+  text-decoration: none;
+  color: inherit;
+}

@@ -7,6 +7,7 @@
   height: 270px;
   object-fit: cover;
   border-radius: 8px;
+  transition: transform 0.2s ease;
 }
 
 .movie-title {
@@ -15,4 +16,13 @@
 
 .movie-rating {
   margin-top: 5px;
+}
+
+.movie-card:hover .movie-poster {
+  transform: scale(1.2);
+}
+
+.movie-card-link {
+  text-decoration: none;
+  color: inherit;
 }
