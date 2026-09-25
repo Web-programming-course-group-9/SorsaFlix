@@ -98,3 +98,46 @@
   padding: 10px 14px;
   border-radius: 6px;
 }
+.review-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.review-form h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+.review-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.review-form select,
+.review-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  padding: 12px;
+  font: inherit;
+  border-radius: 8px;
+}
+
+.review-form textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.review-form button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
