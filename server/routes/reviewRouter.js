@@ -1,4 +1,5 @@
 import { Router } from "express"
+import requireAuth from "../middleware/auth.js"
 
 import {
   addReview,
@@ -9,12 +10,12 @@ import {
 
 const router = Router()
 
-router.post("/", addReview)
+router.post("/", requireAuth, addReview)
 
 router.get("/movie/:movieId", getMovieReviews)
 
 router.get("/:id", getReview)
 
-router.delete("/:id", removeReview)
+router.delete("/:id", requireAuth, removeReview)
 
 export default router
