@@ -85,7 +85,7 @@ router.post("/login", async (req, res, next) => {
         //save token into a cookie
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",//HTTPS required for production environments
+            secure: process.env.NODE_ENV === "production",//HTTPS required for production environments, not really needed in this project
             sameSite: "strict",
             path: "/auth",
             maxAge: REFRESH_TOKEN_EXPIRES_IN_MS
