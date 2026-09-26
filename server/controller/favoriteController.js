@@ -1,4 +1,5 @@
 import { addMovieToFavorites, deleteMovieFromFavorites, getUserById, getFavoritesByUserId } from "../models/favoriteModel.js";
+import { getMovieById } from "../models/movieModel.js"
 
 export async function addFavorite(req, res, next) {
     try {
@@ -54,7 +55,7 @@ export async function removeFavorite(req, res, next) {
 export async function getUserFavorites(req, res, next) {
     try {
         const userId = Number(req.params.userId)
-        
+
         if (userId < 1 || !Number.isInteger(userId)) {
             return res.status(400).json({
                 error: "Invalid user ID"
@@ -69,9 +70,31 @@ export async function getUserFavorites(req, res, next) {
         }
 
         const favorites = await getFavoritesByUserId(userId)
+        const movies = await Promise.all(
+            favorites.map(async (favorite) => {
+                try {
+                    const movie = await getMovieById(favorite.movie_id)
+
+                    return {
+                        id: movie.id,
+                        title: movie.title,
+                        poster_path: movie.poster_path,
+                        vote_average: movie.vote_average,
+                        added_at: favorite.created_at
+                    }
+                } catch (error) {
+                    // TMDB doesn't have this movie anymore, skip it
+                    if (error.response?.status === 404) {
+                        return null
+                    }
+                    throw error
+                }
+            })
+        )
+
         res.json({
             user: user,
-            favorites: favorites
+            favorites: movies.filter((movie) => movie !== null)
         })
 
     } catch (error) {
