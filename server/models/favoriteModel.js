@@ -16,3 +16,21 @@ export async function deleteMovieFromFavorites(movieId, userId) {
     )
     return result.rows[0]
 }
+
+export async function getUserById(userId) {
+    const result = await pool.query(
+        'SELECT id, username FROM users WHERE id = $1',
+        [userId ]
+    )
+    return result.rows[0]
+}
+
+
+
+export async function getFavoritesByUserId(userId) {
+    const result = await pool.query(
+        'SELECT movie_id, created_at FROM favorites WHERE user_id = $1 ORDER BY created_at DESC',
+        [userId]
+    )
+    return result.rows
+}
