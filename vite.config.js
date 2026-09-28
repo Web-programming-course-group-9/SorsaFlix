@@ -23,8 +23,12 @@ export default defineConfig({
       '/reviews': {
         target: 'http://backend:3000',
         changeOrigin: true
+      },
+      '/favorites': {
+        target: 'http://backend:3000',
+        changeOrigin: true
       }
     },
   },
 }
-})
+)

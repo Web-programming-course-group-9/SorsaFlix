@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS public.favorites
     id       serial,
     user_id  integer NOT NULL REFERENCES public.users (id) ON DELETE CASCADE,
     movie_id integer NOT NULL,
+    created_at timestamp with time zone NOT NULL DEFAULT now(),
     PRIMARY KEY (id),
     -- The same movie cannot be added twice to one list
     UNIQUE (user_id, movie_id)

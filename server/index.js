@@ -5,6 +5,7 @@ import movieRouter from "./routes/movieRouter.js"
 import authRouter from "./routes/authRouter.js"
 import serieRouter from "./routes/serieRouter.js"
 import reviewRouter from "./routes/reviewRouter.js"
+import favoriteRouter from "./routes/favoriteRouter.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
@@ -47,6 +48,9 @@ app.use("/series", serieRouter)
 
 // ALL reviews routes are handled under /reviews
 app.use("/reviews", reviewRouter)
+
+// All favorite routes are handled under /favorites
+app.use("/favorites", favoriteRouter)
 
 // Start the server and listen on the port
 app.listen(PORT, () => {
