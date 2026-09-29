@@ -12,13 +12,17 @@ function DeleteGroupButton({ groupId, ownerId, onDelete }) {
     }
 
     async function handleDelete() {
+        // ask user to confirm before deleting
+        if (!window.confirm("Are you sure you want to delete this group? This action cannot be undone.")) {
+            return
+        }
         try {
             // token is added automatically
             await axios.delete(`/groups/${groupId}`)
             // tell parent page to update its group list
             onDelete(groupId)
         } catch (error) {
-            console.error(error.response?.data?.error || "Something went wrong.")
+            alert(error.response?.data?.error || "Something went wrong.")
         }
     }
 
