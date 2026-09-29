@@ -15,6 +15,10 @@ function JoinGroupButton({groupId}) {
     }
 
     async function handleJoin() {
+        // ask user to confirm before sending
+        if (!window.confirm("Send join request to this group?")) {
+            return
+        }
         try {
             // token is added automatically
             await axios.post(`/groups/${groupId}/join`)
