@@ -2,7 +2,8 @@ import {
   createReview,
   getReviewsByMovie,
   getReviewById,
-  deleteReview
+  deleteReview,
+  getAllReviews
 } from "../models/reviewModel.js"
 
 export async function addReview(req, res, next) {
@@ -16,9 +17,9 @@ export async function addReview(req, res, next) {
       })
     }
 
-    if (stars < 1 || stars > 10) {
+    if (stars < 1 || stars > 5) {
       return res.status(400).json({
-        error: "Stars must be between 1 and 10"
+        error: "Stars must be between 1 and 5"
       })
     }
 
@@ -81,6 +82,35 @@ export async function removeReview(req, res, next) {
     res.status(200).json({
       message: "Review deleted"
     })
+  } catch (error) {
+    next(error)
+  }
+}
+export async function getAllMovieReviews(req, res, next) {
+  try {
+    const reviews = await getAllReviews()
+
+    const reviewsWithMovies = await Promise.all(
+      reviews.map(async review => {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${review.movie_id}?api_key=${process.env.TMDB_API_KEY}`
+        )
+
+        const movie = await response.json()
+
+        return {
+          ...review,
+          movie: {
+            id: movie.id,
+            title: movie.title,
+            poster_path: movie.poster_path,
+            vote_average: movie.vote_average
+          }
+        }
+      })
+    )
+
+    res.status(200).json(reviewsWithMovies)
   } catch (error) {
     next(error)
   }
