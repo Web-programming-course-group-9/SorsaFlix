@@ -80,3 +80,22 @@ export async function deleteReview(id, userId) {
 
   return result.rows[0]
 }
+export async function getAllReviews() {
+  const result = await pool.query(
+    `
+      SELECT
+        reviews.id,
+        reviews.movie_id,
+        reviews.review_text,
+        reviews.stars,
+        reviews.created_at,
+        users.username
+      FROM reviews
+      JOIN users
+        ON reviews.user_id = users.id
+      ORDER BY reviews.created_at DESC
+    `
+  )
+
+  return result.rows
+}
