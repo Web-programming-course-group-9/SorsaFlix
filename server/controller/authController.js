@@ -104,8 +104,72 @@ export const login = async (req, res, next) => {
     }
 }
 
+//Refresh logic for session refreshes = refresh cookie refresh
+export const refresh = async (req,res, next) => {
+    try {
+        const refreshToken = req.cookies.refreshToken
+        if (!refreshToken) {
+            return res.status(401).json({ error: "No refresh token provided"})
+        }
+
+        //Find the token in database
+        const storedToken = await findRefreshTokenByHash(hashToken(refreshToken))
+        //If the token has expired return a error
+        if (!storedToken || storedToken.expires_at < new Date()) {
+            return res.status(401).json({ error: "Invalid or expired refresh token"})
+        }
+
+        //The old token is single use so delete the old one and issue a new one
+        await deleteRefreshTokenByHash(storedToken.id)
+
+        const { token: newRefreshToken, tokenHash: newTokenHash } = generateRefreshToken()
+        const expiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN_MS)
+        await insertRefreshToken(storedToken.user_id, newTokenHash, expiresAt)
+           
+        
+        res.cookie("refreshToken", newRefreshToken, refreshCookieOptions)
+
+        //Refresh returns user details for the session to remain logged in
+        res.status(200).json({
+            token: createAccessToken(storedToken.user_id, storedToken.username),
+            user: {id: storedToken.user_id, username: storedToken.username, email: storedToken.email} 
+        })
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 
+//Logout logic deletes refresh token 
+export const logout = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies.refreshToken
+        if (refreshToken) {
+            await deleteRefreshTokenByHash(tokenHash)
+        }
 
+        res.clearCookie("refreshToken", { path: "/auth" })
+        res.status(204).send()
+    } catch (error) {
+        next(error)
+    }
+})
+
+export const deleteAccount = async (req, res, next) => {
+    try {
+        // Delete user; CASCADE will handle related data in other tables if set up
+        const deletedCount = await deleteUserById(req.user.id)
+
+        // no row deleted = user was not found
+        if (deletedCount === 0) {
+            return res.status(404).json({ error: "User not found" })
+        }
+
+        res.status(200).json({ message: "Account deleted successfully" })
+    } catch (error) {
+        next(error)
+    }
+})
 
 
