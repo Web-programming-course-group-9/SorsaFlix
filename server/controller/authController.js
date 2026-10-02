@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import crypto from "crypto"
-import { finUserByEmailOrUsername, insertUser, findUserByEmail, deleteUserById } from "../models/userModel.js"
+import { findUserByEmailOrUsername, insertUser, findUserByEmail, deleteUserById } from "../models/userModel.js"
 import { insertRefreshToken,findRefreshTokenByHash, deleteRefreshTokenById, deleteRefreshTokenByHash } from "../models/refreshTokenModel.js"
 
 
@@ -21,9 +21,9 @@ const generateRefreshToken = () => {
 //Setting the cookie settings for login and refresh
 const refreshCookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV == "production", //not really needed in this project
+    secure: process.env.NODE_ENV === "production", //not really needed in this project
     sameSite: "strict",
-    path: "auth",
+    path: "/auth",
     maxAge: REFRESH_TOKEN_EXPIRES_IN_MS
 }
 
@@ -48,7 +48,7 @@ export const register = async (req, res, next) => {
 
 
         const existing = await findUserByEmailOrUsername(email, username)
-        if (existing.rows.length > 0) {
+        if (existing) {
             return res.status(409).json({ error: "Email or username is already in use" })
         }
 
@@ -71,7 +71,7 @@ export const login = async (req, res, next) => {
             return res.status(400).json({ error: "Email and password are required" })
         }
         //Find the user in database using email address
-        const result = await findUserByEmail(email)
+        const user = await findUserByEmail(email)
         if (!user) {
             return res.status(401).json({ error: "Invalid email or password" })
         }
@@ -120,7 +120,7 @@ export const refresh = async (req,res, next) => {
         }
 
         //The old token is single use so delete the old one and issue a new one
-        await deleteRefreshTokenByHash(storedToken.id)
+        await deleteRefreshTokenById(storedToken.id)
 
         const { token: newRefreshToken, tokenHash: newTokenHash } = generateRefreshToken()
         const expiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN_MS)
@@ -146,7 +146,7 @@ export const logout = async (req, res, next) => {
     try {
         const refreshToken = req.cookies.refreshToken
         if (refreshToken) {
-            await deleteRefreshTokenByHash(tokenHash)
+            await deleteRefreshTokenByHash(hashToken(refreshToken))
         }
 
         res.clearCookie("refreshToken", { path: "/auth" })
@@ -154,7 +154,7 @@ export const logout = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-})
+}
 
 export const deleteAccount = async (req, res, next) => {
     try {
@@ -170,6 +170,6 @@ export const deleteAccount = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-})
+}
 
 

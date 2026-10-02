@@ -5,7 +5,7 @@ import { pool } from "../db/index.js"
 //Routes login, register, logout , userdelete etc
 
 //Find user by email or by username
-export const finUserByEmailOrUsername = async (email, username) => {
+export const findUserByEmailOrUsername = async (email, username) => {
     const result = await pool.query(
         'SELECT id FROM users WHERE email = $1 OR username = $2',
         [email, username]
@@ -16,7 +16,7 @@ export const finUserByEmailOrUsername = async (email, username) => {
 //Function to add user into database with /register
 export const insertUser = async (username, email, passwordHash) => {
     const result = await pool.query(
-        'INSERT INTO users (username,email, passwordHash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
+        'INSERT INTO users (username,email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
         [username, email, passwordHash]
     )
     return result.rows[0]
