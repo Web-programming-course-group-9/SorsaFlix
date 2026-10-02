@@ -8,16 +8,16 @@ axios.defaults.withCredentials = true
 let refreshPromise = null
 
 //Function to refresh the access token
-export function refreshAccessToken (){
+export function refreshAccessToken() {
     if (!refreshPromise) {
         refreshPromise = axios.post("/auth/refresh")
-        .then((response) => {
-            setAccessToken(response.data.token)
-            return response.data
-        })
-        .finally(() =>{
-            refreshPromise = null
-        })   
+            .then((response) => {
+                setAccessToken(response.data.token)
+                return response.data
+            })
+            .finally(() => {
+                refreshPromise = null
+            })
     }
     return refreshPromise
 }
@@ -28,7 +28,7 @@ axios.interceptors.request.use((config) => {
     const token = getAccessToken()
     if (token) {
         config.headers.Authorization = `Bearer ${token}`
-        
+
     }
     return config
 })
@@ -52,7 +52,7 @@ axios.interceptors.response.use(
             } catch (refreshError) {
                 setAccessToken(null)
                 return Promise.reject(refreshError)
-            } 
+            }
         }
         return Promise.reject(error)
     }
