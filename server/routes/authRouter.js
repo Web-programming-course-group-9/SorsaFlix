@@ -111,7 +111,7 @@ router.post("/refresh", async (req,res, next) => {
 
         const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex")
         const result = await pool.query(
-            "SELECT rt.*, u.username FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = $1",
+            "SELECT rt.*, u.username, u.email FROM refresh_tokens rt JOIN users u ON u.id = rt.user_id WHERE rt.token_hash = $1",
             [tokenHash]
         )
 
@@ -145,8 +145,11 @@ router.post("/refresh", async (req,res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: ACCESS_TOKEN_EXPIRES_IN }
         )
-
-        res.status(200).json({ token: newAccessToken })
+        //Refresh returns user details for the session to remain logged in
+        res.status(200).json({
+            token: newAccessToken,
+            user: {id: storedToken.user_id, username: storedToken.username, email: storedToken.email} 
+        })
 
     } catch (error) {
         next(error)
