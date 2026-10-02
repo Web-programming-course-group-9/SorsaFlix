@@ -235,6 +235,109 @@ describe('Logout', () => {
 })
 
 
+//Test refresh token functionality etc
+
+describe('Refresh token', () => {
+
+    const testUser = {
+        username: 'refreshusertestuser',
+        email: 'refreshtest@example.com',
+        password: 'Testpassword1'
+    }
+
+    //Creates test user for each test
+    before(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+
+    //Delete the users after tests are done
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+    //Login before the test
+    async function loginAndGetCookie() {
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const setCookieHeader = loginRes.headers.get('set-cookie')
+        return setCookieHeader.split(';')[0]
+    }
+    //Successful refresh with proper cookie
+    it('should return 200, a new token and a new cookie when the refresh cookie is valid', async () => {
+        const cookie = await loginAndGetCookie()
+
+        const res = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+        const data = await res.json()    
+
+        expect(res.status).to.equal(200)
+        expect(data).to.have.property('token')
+        expect(data.user).to.have.property('email', testUser.email)
+
+        const newCookie = res.headers.get('set-cookie').split(';')[0]
+        expect(newCookie).to.not.equal(cookie)
+    })
+
+    //No cookie
+    it('should return 401 when no refresh cookie is provided', async () => {
+        const res = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST'
+        })
+        expect(res.status).to.equal(401)
+    })
+
+    //Testing invalid token
+    it('should return 401 when the refresh token is not valid', async () => {
+        const res = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': 'refreshToken=ThisisNotAValidToken'
+            }
+        })
+        expect(res.status).to.equal(401)
+    })
+
+   //refresh tokens are single use, so a used token must be rejected
+    it('should return 401 when an already used refresh token is used again', async () => {
+        const oldCookie = await loginAndGetCookie()
+
+        //First use is valid and rotates the token
+        const firstRes = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': oldCookie
+            }
+        })
+        expect(firstRes.status).to.equal(200)
+
+        //Second use of the same old cookie must fail
+        const secondRes = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': oldCookie
+            }
+        })
+        expect(secondRes.status).to.equal(401)
+    })
+})
 
 
 
