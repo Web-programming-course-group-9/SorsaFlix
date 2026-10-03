@@ -141,3 +141,21 @@
   border-radius: 8px;
   cursor: pointer;
 }
+
+
+.favorite-button{
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1.0rem;
+  color: #e25555;
+  font-size: 2.0rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform;
+}
+
+.favorite-button:hover,
+.favorite-button:focus-visible{
+  transform: scale(2);
+}

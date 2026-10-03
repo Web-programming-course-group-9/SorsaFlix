@@ -26,7 +26,6 @@ export async function getUserById(userId) {
 }
 
 
-
 export async function getFavoritesByUserId(userId) {
     const result = await pool.query(
         'SELECT movie_id, created_at FROM favorites WHERE user_id = $1 ORDER BY created_at DESC',
@@ -34,3 +33,4 @@ export async function getFavoritesByUserId(userId) {
     )
     return result.rows
 }
+
