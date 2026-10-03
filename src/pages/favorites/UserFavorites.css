@@ -1,0 +1,22 @@
+
+.favorite-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+.favorite-remove-button {
+    align-self: center;
+    padding: 0.35rem 0.8rem;
+    background: none;
+    color: inherit;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.favorite-remove-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}

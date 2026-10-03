@@ -17,6 +17,7 @@ import Search from "./pages/Search"
 import Moviepage from "./pages/movies/Moviepage"
 import SeriePage from "./pages/series/seriePage"
 import Genres from "./pages/genres/Genres"
+import Favorites from "./pages/favorites/UserFavorites"
 
 import "./App.css"
 
@@ -31,6 +32,7 @@ function App() {
         <Route path="/series" element={<Series />} />
         <Route path="/genres" element={<Genres />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
