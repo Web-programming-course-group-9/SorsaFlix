@@ -52,6 +52,17 @@ export async function removeFavorite(req, res, next) {
     }
 }
 
+export async function getMyFavorites(req, res, next) {
+    try {
+        const favorites = await getFavoritesByUserId(req.user.id)
+
+        // An empty array is a valid result (user has no favorites yet), not an error
+        res.json(favorites)
+    } catch (error) {
+        next(error)
+    }
+}
+
 export async function getUserFavorites(req, res, next) {
     try {
         const userId = Number(req.params.userId)
