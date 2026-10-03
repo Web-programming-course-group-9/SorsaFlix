@@ -58,8 +58,11 @@ function Header() {
 
             {menuOpen && (
               <div className="dropdown">
-                <Link to={`/shared/favorites/${user.id}`} onClick={() => setMenuOpen(false)}>
+                <Link to="/favorites" onClick={() => setMenuOpen(false)}>
                   My favorites
+                </Link>
+                <Link to={`/shared/favorites/${user.id}`} onClick={() => setMenuOpen(false)}>
+                  Shared favorites
                 </Link>
 
                 <button onClick={handleLogout}>
