@@ -79,7 +79,7 @@
 }
 
 /* Both "Log out" and "Delete Account" buttons inside the dropdown */
-.dropdown button {
+.dropdown button, .dropdown a {
   font: inherit;
   text-align: left;
   padding: 10px 16px;
