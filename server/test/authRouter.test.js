@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { pool } from "../db/index.js"
+import jwt from "jsonwebtoken"
 
 //For register, login and logout tests you must point out to the correct database DATABASE_URL in
 //a .env file in ./server/.env, without that the tests will fail on some parts since these use direct db functionality to
@@ -234,6 +235,95 @@ describe('Logout', () => {
     })
 })
 
+//Test access token
+describe('Access token', () => {
+
+    const testUser = {
+        username: 'accesstokentestuser',
+        email: 'accesstokentest@example.com',
+        password: 'Testpassword1'
+    }
+
+    let accessToken = ''
+    let userId = null
+
+    //Create the test user and log in once to get a real access token
+    before(async () => {
+        const registerRes = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+        //Fail early with a clear message if the user could not be created
+        expect(registerRes.status).to.equal(201)
+
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const loginData = await loginRes.json()
+        accessToken = loginData.token
+        userId = loginData.user.id
+    })
+
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+    //Helper: tries to delete the account with the given token
+    //Used here only with tokens that should be rejected
+    async function deleteAccountWithToken(token) {
+        return fetch('http://localhost:3000/auth/account', {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+    }
+
+    it('should contain the user id and username and expire in 15 minutes', () => {
+        const payload = jwt.verify(accessToken, process.env.JWT_SECRET)
+
+        expect(payload).to.have.property('id', userId)
+        expect(payload).to.have.property('username', testUser.username)
+        expect(payload.exp - payload.iat).to.equal(15 * 60)
+    })
+
+    it('should return 401 when the token is not a valid JWT', async () => {
+        const res = await deleteAccountWithToken('thisIsNotAValidToken')
+        expect(res.status).to.equal(401)
+    })
+
+    it('should return 401 when the token has expired', async () => {
+        const expiredToken = jwt.sign(
+            { id: userId, username: testUser.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '-10s' }
+        )
+        const res = await deleteAccountWithToken(expiredToken)
+        expect(res.status).to.equal(401)
+    })
+
+    it('should return 401 when the token is signed with a wrong secret', async () => {
+        const forgedToken = jwt.sign(
+            { id: userId, username: testUser.username },
+            'thisIsTheWrongSecret',
+            { expiresIn: '15m' }
+        )
+        const res = await deleteAccountWithToken(forgedToken)
+        expect(res.status).to.equal(401)
+    })
+
+
+})
 
 //Test refresh token functionality etc
 
@@ -286,7 +376,7 @@ describe('Refresh token', () => {
                 'Cookie': cookie
             }
         })
-        const data = await res.json()    
+        const data = await res.json()
 
         expect(res.status).to.equal(200)
         expect(data).to.have.property('token')
@@ -315,7 +405,7 @@ describe('Refresh token', () => {
         expect(res.status).to.equal(401)
     })
 
-   //refresh tokens are single use, so a used token must be rejected
+    //refresh tokens are single use, so a used token must be rejected
     it('should return 401 when an already used refresh token is used again', async () => {
         const oldCookie = await loginAndGetCookie()
 
