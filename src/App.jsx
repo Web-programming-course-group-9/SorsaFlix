@@ -22,8 +22,6 @@ import SharedFavorites from "./pages/favorites/SharedFavorites"
 import GroupPage from "./pages/groups/GroupPage"
 import NotFound from "./pages/NotFound"
 
-
-
 import "./App.css"
 
 function App() {
