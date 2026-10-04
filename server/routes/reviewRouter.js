@@ -5,17 +5,21 @@ import {
   addReview,
   getMovieReviews,
   getReview,
-  removeReview
+  removeReview,
+  getAllMovieReviews
 } from "../controller/reviewController.js"
 
 const router = Router()
 
 router.post("/", requireAuth, addReview)
 
+router.get("/", getAllMovieReviews)
+
 router.get("/movie/:movieId", getMovieReviews)
 
 router.get("/:id", getReview)
 
 router.delete("/:id", requireAuth, removeReview)
+
 
 export default router
