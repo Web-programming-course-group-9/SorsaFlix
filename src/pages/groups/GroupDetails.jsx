@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import MovieCard from "../../components/MovieCard.jsx"
 import { getAccessToken } from "../../api/tokenStore.js"
+import GroupMembers from "../../components/GroupMembers.jsx"
  
 // GroupDetails component fetches and displays details of a specific group, including its movies
 function GroupDetails() {
@@ -43,7 +44,7 @@ function GroupDetails() {
         )
       } catch (error) {
         console.error(error)
-// Handle different error scenarios based on the response status
+  // Handle different error scenarios based on the response status
         if (error.response?.status === 403) {
           setError(
             "You are not a member of this group."
@@ -62,6 +63,15 @@ function GroupDetails() {
 
     fetchGroup()
   }, [id])
+
+    // remove member from the list without fetching the group again
+  function handleMemberRemoved(memberId) {
+    setGroup(prev => ({
+      ...prev,
+      members: prev.members.filter(member => member.id !== memberId)
+    }))
+  }
+
 // Render loading, error, or group details based on the current state
   if (loading) {
     return (
@@ -83,6 +93,12 @@ function GroupDetails() {
   return (
     <main className="group-details-page">
       <h1>{group.name}</h1>
+        <GroupMembers
+        groupId={group.id}
+        ownerId={group.owner_id}
+        members={group.members}
+        onMemberRemoved={handleMemberRemoved}
+      />
 
       <section>
         <h2>Movies</h2>
