@@ -1,4 +1,4 @@
-import {deleteGroup, addJoinRequest} from '../models/groupModel.js'
+import {deleteGroup, addJoinRequest,getGroupById,isGroupMember,getGroupMovies,isGroupOwner,getPendingRequests,acceptJoinRequest,rejectJoinRequest} from '../models/groupModel.js'
 
 // delete group
 export async function removeGroup(req, res, next) {
@@ -54,4 +54,150 @@ export async function sendJoinRequest(req, res, next) {
         }
         next(error)
     }
+}
+// get group details and movies
+export async function getGroup(req, res, next) {
+  try {
+    const groupId = Number(req.params.id)
+    const userId = req.user.id
+
+    const group = await getGroupById(groupId)
+
+    if (!group) {
+      return res.status(404).json({
+        error: "Group not found"
+      })
+    }
+
+    const member = await isGroupMember(
+      groupId,
+      userId
+    )
+
+    if (!member) {
+      return res.status(403).json({
+        error: "You are not a member of this group"
+      })
+    }
+
+    const movies = await getGroupMovies(groupId)
+
+    res.status(200).json({
+      ...group,
+      movies
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// get pending join requests for a group
+export async function getPendingGroupRequests(
+  req,
+  res,
+  next
+) {
+  try {
+    const groupId = Number(req.params.id)
+    const userId = req.user.id
+
+    const owner = await isGroupOwner(
+      groupId,
+      userId
+    )
+
+    if (!owner) {
+      return res.status(403).json({
+        error: "Only the group owner can view join requests"
+      })
+    }
+
+    const requests = await getPendingRequests(
+      groupId
+    )
+
+    res.status(200).json(requests)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Accept a pending join request
+export async function acceptGroupRequest(
+  req,
+  res,
+  next
+) {
+  try {
+    const groupId = Number(req.params.id)
+    const requestId = Number(req.params.requestId)
+    const userId = req.user.id
+
+    const owner = await isGroupOwner(
+      groupId,
+      userId
+    )
+
+    if (!owner) {
+      return res.status(403).json({
+        error: "Only the group owner can accept join requests"
+      })
+    }
+
+    const request = await acceptJoinRequest(
+      requestId,
+      groupId
+    )
+
+    if (!request) {
+      return res.status(404).json({
+        error: "Join request not found"
+      })
+    }
+
+    res.status(200).json(request)
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Reject a pending join request
+export async function rejectGroupRequest(
+  req,
+  res,
+  next
+) {
+  try {
+    const groupId = Number(req.params.id)
+    const requestId = Number(req.params.requestId)
+    const userId = req.user.id
+
+    const owner = await isGroupOwner(
+      groupId,
+      userId
+    )
+
+    if (!owner) {
+      return res.status(403).json({
+        error: "Only the group owner can reject join requests"
+      })
+    }
+
+    const request = await rejectJoinRequest(
+      requestId,
+      groupId
+    )
+
+    if (!request) {
+      return res.status(404).json({
+        error: "Join request not found"
+      })
+    }
+
+    res.status(200).json({
+      message: "Join request rejected"
+    })
+  } catch (error) {
+    next(error)
+  }
 }

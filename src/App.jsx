@@ -18,7 +18,8 @@ import Moviepage from "./pages/movies/Moviepage"
 import SeriePage from "./pages/series/seriePage"
 import Genres from "./pages/genres/Genres"
 import Favorites from "./pages/favorites/UserFavorites"
-
+import GroupDetails from "./pages/groups/GroupDetails"
+import GroupRequests from "./pages/groups/GroupRequests"
 import "./App.css"
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/serie/:seriesId" element={<SeriePage />} />
+        <Route path="/groups/:id" element={<GroupDetails />}/>
+        <Route path="/groups/:id/requests" element={<GroupRequests />} />
       </Routes>
     </BrowserRouter>
   )
