@@ -23,3 +23,18 @@
   aspect-ratio: 2 / 3;
   object-fit: cover;
 }
+
+.group-list {
+  list-style: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.group-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #444;
+}
