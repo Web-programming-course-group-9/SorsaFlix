@@ -18,8 +18,11 @@ import Moviepage from "./pages/movies/Moviepage"
 import SeriePage from "./pages/series/seriePage"
 import Genres from "./pages/genres/Genres"
 import Favorites from "./pages/favorites/UserFavorites"
+import SharedFavorites from "./pages/favorites/SharedFavorites"
 import GroupDetails from "./pages/groups/GroupDetails"
 import GroupRequests from "./pages/groups/GroupRequests"
+import NotFound from "./pages/NotFound"
+
 import "./App.css"
 
 function App() {
@@ -33,15 +36,17 @@ function App() {
         <Route path="/series" element={<Series />} />
         <Route path="/genres" element={<Genres />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/group/:id" element={<GroupDetails />} />
+        <Route path="/group/:id/requests" element={<GroupRequests />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/shared/favorites/:userId" element={<SharedFavorites />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/serie/:seriesId" element={<SeriePage />} />
-        <Route path="/groups/:id" element={<GroupDetails />}/>
-        <Route path="/groups/:id/requests" element={<GroupRequests />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
