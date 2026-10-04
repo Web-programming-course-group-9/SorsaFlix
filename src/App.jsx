@@ -18,6 +18,7 @@ import Moviepage from "./pages/movies/Moviepage"
 import SeriePage from "./pages/series/seriePage"
 import Genres from "./pages/genres/Genres"
 import Favorites from "./pages/favorites/UserFavorites"
+import SharedFavorites from "./pages/favorites/SharedFavorites"
 
 import "./App.css"
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/genres" element={<Genres />} />
         <Route path="/groups" element={<Groups />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/shared/favorites/:userId" element={<SharedFavorites />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
