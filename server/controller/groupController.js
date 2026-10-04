@@ -1,4 +1,4 @@
-import { deleteGroup, addJoinRequest, createGroup, getAllGroups } from '../models/groupModel.js'
+import { deleteGroup, addJoinRequest, createGroup, getAllGroups, getGroupById } from '../models/groupModel.js'
 
 // delete group
 export async function removeGroup(req, res, next) {
@@ -96,3 +96,29 @@ export async function listGroups(req, res, next) {
         next(error)
     }
 }
+
+// get one group by id, public
+export async function getGroup(req, res, next) {
+    try {
+        //group id from URL
+        const groupId = Number(req.params.groupId)
+
+        // check that id is a positive integer
+        if (groupId < 1 || !Number.isInteger(groupId)) {
+            return res.status(400).json({ error: 'Invalid group ID' })
+        }
+
+        //returns undefined if no group has this id
+        const group = await getGroupById(groupId)
+
+        if (!group) {
+            return res.status(404).json({ error: 'Group not found' })
+        }
+
+        res.json(group) // 200 OK by default
+    } catch (error) {
+        // pass unexpected errors to error handler
+        next(error)
+    }
+}
+

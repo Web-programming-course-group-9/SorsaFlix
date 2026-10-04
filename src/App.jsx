@@ -19,6 +19,10 @@ import SeriePage from "./pages/series/seriePage"
 import Genres from "./pages/genres/Genres"
 import Favorites from "./pages/favorites/UserFavorites"
 import SharedFavorites from "./pages/favorites/SharedFavorites"
+import GroupPage from "./pages/groups/GroupPage"
+import NotFound from "./pages/NotFound"
+
+
 
 import "./App.css"
 
@@ -33,6 +37,7 @@ function App() {
         <Route path="/series" element={<Series />} />
         <Route path="/genres" element={<Genres />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/group/:groupId" element={<GroupPage />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/shared/favorites/:userId" element={<SharedFavorites />} />
         <Route path="/reviews" element={<Reviews />} />
@@ -41,6 +46,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/serie/:seriesId" element={<SeriePage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
