@@ -1,4 +1,4 @@
-import { deleteGroup, addJoinRequest, createGroup, getAllGroups, getGroupById, isGroupMember, getGroupMovies, isGroupOwner, getPendingRequests, acceptJoinRequest, rejectJoinRequest, addGroupMovie, getUserGroups } from '../models/groupModel.js'
+import { deleteGroup, addJoinRequest, createGroup, getAllGroups, getGroupById, isGroupMember, getGroupMovies, isGroupOwner, getPendingRequests, acceptJoinRequest, rejectJoinRequest, removeMember, getGroupMembers, addGroupMovie, getUserGroups } from '../models/groupModel.js'
 
 // delete group
 export async function removeGroup(req, res, next) {
@@ -97,7 +97,7 @@ export async function listGroups(req, res, next) {
     }
 }
 
-// get group details and movies
+// get group details, movies and members
 export async function getGroup(req, res, next) {
   try {
     const groupId = Number(req.params.id)
@@ -123,10 +123,12 @@ export async function getGroup(req, res, next) {
     }
 
     const movies = await getGroupMovies(groupId)
+    const members = await getGroupMembers(groupId)
 
     res.status(200).json({
       ...group,
-      movies
+      movies,
+      members    
     })
   } catch (error) {
     next(error)
@@ -239,6 +241,50 @@ export async function rejectGroupRequest(
     res.status(200).json({
       message: "Join request rejected"
     })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Remove a member: user can leave by themselves, or owner can remove others
+export async function removeGroupMember(req, res, next) {
+  try {
+    const groupId = Number(req.params.groupId)
+    // user to be removed, from URL
+    const memberId = Number(req.params.memberId)
+    // logged in user, from token
+    const userId = req.user.id
+
+    // both ids must be positive integers
+    if (!Number.isInteger(groupId) || groupId < 1 ||
+      !Number.isInteger(memberId) || memberId < 1) {
+      return res.status(400).json({ error: "Invalid ID" })
+    }
+
+    const isSelf = memberId === userId
+    const owner = await isGroupOwner(groupId, userId)
+
+    // owner can't leave, otherwise the group would have no owner
+    if (isSelf && owner) {
+      return res.status(400).json({
+        error: "Owner can't leave the group. Delete group instead."
+      })
+    }
+
+    //others can only remove themselves
+    if (!isSelf && !owner) {
+      return res.status(403).json({
+        error: "Only the group owner can remove other members"
+      })
+    }
+
+    const removed = await removeMember(groupId, memberId)
+
+    if (!removed) {
+      return res.status(404).json({ error: "Member not found" })
+    }
+
+    res.sendStatus(204) // No Content
   } catch (error) {
     next(error)
   }

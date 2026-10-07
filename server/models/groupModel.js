@@ -184,6 +184,42 @@ export async function rejectJoinRequest(requestId, groupId) {
   return result.rows[0]
 }
 
+// Remove an accepted member from a group
+export async function removeMember(groupId, userId) {
+  const result = await pool.query(
+    `
+      DELETE FROM group_members
+      WHERE group_id = $1
+      AND user_id = $2
+      AND status = 'accepted'
+      RETURNING *
+    `,
+    [groupId, userId]
+  )
+
+  return result.rows[0]
+}
+
+// Get accepted members of a group with their usernames
+export async function getGroupMembers(groupId) {
+  const result = await pool.query(
+    `
+      SELECT
+        users.id,
+        users.username
+      FROM group_members
+      JOIN users
+        ON group_members.user_id = users.id
+      WHERE group_members.group_id = $1
+      AND group_members.status = 'accepted'
+      ORDER BY users.username
+    `,
+    [groupId]
+  )
+
+  return result.rows
+}
+
 // Add a movie to a group
 export async function addGroupMovie(groupId, movieId) {
   const result = await pool.query(
