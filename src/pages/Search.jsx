@@ -46,7 +46,7 @@ function Search() {
       <h1>Search results for "{query}"</h1>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      {!loading && !error && <SearchResults results={results} />}
+      {!loading && !error && <SearchResults results={results} type={type} />}
     </main>
   )
 }
