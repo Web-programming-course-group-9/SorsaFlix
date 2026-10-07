@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import axios from "axios"
 import MovieCard from "../../components/MovieCard.jsx"
 import { getAccessToken } from "../../api/tokenStore.js"
 import GroupMembers from "../../components/GroupMembers.jsx"
+import { useAuth } from "../../context/AuthContext.jsx"
 import "./GroupDetails.css"
  
 // GroupDetails component fetches and displays details of a specific group, including its movies
 function GroupDetails() {
   const { id } = useParams()
+  const { user } = useAuth()
 
   const [group, setGroup] = useState(null)
   const [movies, setMovies] = useState([])
@@ -94,6 +96,13 @@ function GroupDetails() {
   return (
     <main className="group-details-page">
       <h1>{group.name}</h1>
+
+      {/* only owner sees link to pending join requests */}
+      {user?.id === group.owner_id && (
+        <Link to={`/group/${group.id}/requests`}>
+          Join Requests
+        </Link>
+      )}
         <GroupMembers
         groupId={group.id}
         ownerId={group.owner_id}
