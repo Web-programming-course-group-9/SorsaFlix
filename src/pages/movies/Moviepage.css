@@ -159,3 +159,15 @@
 .favorite-button:focus-visible{
   transform: scale(2);
 }
+
+/* Space between the heart and the "Add to group" menu */
+.add-to-group {
+  margin-left: 16px;
+}
+
+/* Small gap between dropdown, button and message */
+.add-to-group select,
+.add-to-group button,
+.add-to-group span {
+  margin-left: 6px;
+}

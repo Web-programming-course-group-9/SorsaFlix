@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import requireAuth from '../middleware/auth.js' // checks login token
-import { removeGroup, sendJoinRequest, addGroup, listGroups, getGroup, getPendingGroupRequests, acceptGroupRequest, rejectGroupRequest } from '../controller/groupController.js'
+import { removeGroup, sendJoinRequest, addGroup, listGroups, getGroup, getPendingGroupRequests, acceptGroupRequest, rejectGroupRequest, removeGroupMember, addMovieToGroup, listMyGroups } from '../controller/groupController.js'
 
 const router = Router()
 
@@ -9,6 +9,9 @@ router.delete('/:groupId', requireAuth, removeGroup)
 
 // list all public groups
 router.get('/', listGroups)
+
+// get logged in user's groups for "add to group" menu
+router.get("/my", requireAuth, listMyGroups)
 
 // create group
 router.post('/', requireAuth, addGroup)
@@ -27,5 +30,10 @@ router.patch("/:id/requests/:requestId/accept", requireAuth,acceptGroupRequest)
 
 // reject a pending join request
 router.delete("/:id/requests/:requestId",requireAuth,rejectGroupRequest)
+
+// remove member: user leaves or owner removes member
+router.delete('/:groupId/members/:memberId', requireAuth, removeGroupMember)
+// add a movie to a group
+router.post('/:id/movies', requireAuth, addMovieToGroup)
 
 export default router
