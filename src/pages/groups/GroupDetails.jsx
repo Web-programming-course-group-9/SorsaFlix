@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import MovieCard from "../../components/MovieCard.jsx"
 import { getAccessToken } from "../../api/tokenStore.js"
+import "./GroupDetails.css"
  
 // GroupDetails component fetches and displays details of a specific group, including its movies
 function GroupDetails() {
@@ -90,7 +91,7 @@ function GroupDetails() {
         {movies.length === 0 ? (
           <p>No movies in this group.</p>
         ) : (
-          <div className="movie-grid">
+          <div className="group-movie-grid">
             {movies.map(movie => (
               <MovieCard
                 key={movie.id}
