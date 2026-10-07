@@ -1,4 +1,4 @@
-import { deleteGroup, addJoinRequest, createGroup, getAllGroups, getGroupById, isGroupMember, getGroupMovies, isGroupOwner, getPendingRequests, acceptJoinRequest, rejectJoinRequest } from '../models/groupModel.js'
+import { deleteGroup, addJoinRequest, createGroup, getAllGroups, getGroupById, isGroupMember, getGroupMovies, isGroupOwner, getPendingRequests, acceptJoinRequest, rejectJoinRequest, addGroupMovie, getUserGroups } from '../models/groupModel.js'
 
 // delete group
 export async function removeGroup(req, res, next) {
@@ -239,6 +239,46 @@ export async function rejectGroupRequest(
     res.status(200).json({
       message: "Join request rejected"
     })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// Add a movie to a group, only members can add
+export async function addMovieToGroup(req, res, next) {
+  try {
+    const groupId = Number(req.params.id)
+    const userId = req.user.id
+    const movieId = Number(req.body.movie_id)
+
+    // check that both ids are positive integers
+    if (groupId < 1 || !Number.isInteger(groupId) || movieId < 1 || !Number.isInteger(movieId)) {
+      return res.status(400).json({ error: 'Invalid group ID or movie ID' })
+    }
+
+    // Only accepted members can add movies
+    const member = await isGroupMember(groupId, userId)
+    if (!member) {
+      return res.status(403).json({ error: 'You are not a member of this group' })
+    }
+
+    const movie = await addGroupMovie(groupId, movieId)
+    res.status(201).json(movie)
+  } catch (error) {
+    // Unique violation error: movie already added to group
+    if (error.code === '23505') {
+      return res.status(409).json({ error: 'This movie has already been added to the group' })
+    }
+    next(error)
+  }
+}
+
+// Get logged in user's groups for "add to group" menu
+export async function listMyGroups(req, res, next) {
+  try {
+    const userId = req.user.id
+    const groups = await getUserGroups(userId)
+    res.status(200).json(groups)
   } catch (error) {
     next(error)
   }

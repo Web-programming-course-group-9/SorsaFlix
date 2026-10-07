@@ -183,3 +183,34 @@ export async function rejectJoinRequest(requestId, groupId) {
 
   return result.rows[0]
 }
+
+// Add a movie to a group
+export async function addGroupMovie(groupId, movieId) {
+  const result = await pool.query(
+    `
+      INSERT INTO group_movies (group_id, movie_id)
+      VALUES ($1, $2)
+      RETURNING *
+    `,
+    [groupId, movieId]
+  )
+
+  return result.rows[0]
+}
+
+// Get groups where user is an accepted member
+export async function getUserGroups(userId) {
+  const result = await pool.query(
+    `
+      SELECT groups.id, groups.name
+      FROM groups
+      JOIN group_members ON group_members.group_id = groups.id
+      WHERE group_members.user_id = $1
+      AND group_members.status = 'accepted'
+      ORDER BY groups.name
+    `,
+    [userId]
+  )
+
+  return result.rows
+}
