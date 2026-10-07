@@ -5,6 +5,7 @@ import "./Moviepage.css"
 import ReviewForm from "../../components/ReviewForm"
 import ReviewList from "../../components/reviewList/reviewList.jsx"
 import { useAuth } from "../../context/AuthContext.jsx"
+import AddToGroupMenu from "../../components/addToGroupMenu/AddToGroupMenu.jsx"
 
 function MoviePage() {
   //get movieId from URL -> "/movie/550" -> movieId = 550
@@ -150,6 +151,9 @@ function MoviePage() {
                 {isFavorite ? "♥" : "♡"}
               </button>
             )}
+
+            {/* Add this movie to one of user's groups */}
+            <AddToGroupMenu movieId={movieIdNumber} />
           </p>
 
           <p className="movie-genres">
