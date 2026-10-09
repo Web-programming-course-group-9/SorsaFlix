@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS public.group_movies
     id       serial,
     group_id integer NOT NULL REFERENCES public.groups (id) ON DELETE CASCADE,
     movie_id integer NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
     -- The same movie cannot be added twice to one group
     UNIQUE (group_id, movie_id)
 );
