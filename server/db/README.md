@@ -22,20 +22,16 @@ Movie data is not stored in the database. Tables that refer to movies store only
 | favorites | Users' favorite movies |
 | reviews | Movie reviews |
 
-All foreign keys referencing `users` and `groups` use `ON DELETE CASCADE`. When a user is deleted, their groups, memberships, favorites and reviews are deleted too.
+All foreign keys referencing `users` and `groups` use `ON DELETE CASCADE`. When a user is deleted, their refresh tokens, groups, memberships, favorites and reviews are deleted too. When a group is deleted, its memberships and movies are deleted too.
 
-## 4. Table details
+## 4. Rules and constraints
 
-### 4.1 group_members.status
-
-A new join request gets the status `pending`. When the group owner accepts the request, the status changes to `accepted`. Only accepted members can view the group page and add movies. Unique (group_id, user_id) prevents duplicate join requests.
-
-### 4.2 group_movies
-
-| Column | Type | Description |
-|---|---|---|
-| id | serial | Primary key |
-| group_id | integer | Foreign key → groups.id, ON DELETE CASCADE |
-| movie_id | integer | TMDB movie id |
-
-Unique (group_id, movie_id): the same movie cannot be added twice to the same group.
+| Table | Rules |
+|---|---|
+| users | `email` and `username` are unique. `password_hash` stores a bcrypt hash, never the plain password. `created_at` is set automatically |
+| refresh_tokens | Stores a SHA-256 hash of the token, never the token itself. `token_hash` is unique. `expires_at` is 7 days after creation |
+| groups | `owner_id` is the user who created the group. Only the owner can delete the group |
+| group_members | `status` is `pending` for a join request and `accepted` for a member. Unique (group_id, user_id) prevents duplicate join requests. Only accepted members can view the group page and add movies |
+| group_movies | `movie_id` is a TMDB movie id. Unique (group_id, movie_id): the same movie cannot be added twice to the same group |
+| favorites | `movie_id` is a TMDB movie id. Unique (user_id, movie_id): the same movie cannot be added twice to the same list |
+| reviews | `movie_id` is a TMDB movie id. `stars` must be between 1 and 5 (CHECK). `created_at` is set automatically |
