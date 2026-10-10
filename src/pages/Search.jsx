@@ -11,7 +11,7 @@ function Search() {
   const year = searchParams.get("year") || ""
 
   const [results, setResults] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
   useEffect(() => {
@@ -30,7 +30,9 @@ function Search() {
         setResults(response.data)
       } catch (error) {
         console.error(error)
-        setError("Search failed.")
+        setResults([])
+        const serverMessage = error.response?.data?.error
+        setError(serverMessage || "Search failed. Please try again later.")
       } finally {
         setLoading(false)
       }
