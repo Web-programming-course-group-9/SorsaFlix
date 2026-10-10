@@ -8,7 +8,7 @@ Movie data is not stored in the database. Tables that refer to movies store only
 
 ## 2. Class diagram
 
-[Insert class diagram image from pgAdmin ERD Tool here]
+![Class diagram](sorsaflix_class-diagram.png)
 
 ## 3. Tables
 
