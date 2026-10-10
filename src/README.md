@@ -12,47 +12,53 @@ src/
   pages/          One folder or file per page
 ```
 
-- `api/tokenStore.js`: keeps the access token in memory.
-- `api/axiosSetup.js`: adds the token to every request automatically. If the backend returns 401, it gets a new token with the refresh token and retries the request.
-- `context/AuthContext.jsx`: provides `user`, `login` and `logout` to all components through `useAuth()`.
+The frontend is a React application built with Vite. API requests are made with Axios. In development, `vite.config.js` (project root) forwards API requests (`/auth`, `/movies`, `/series`, `/reviews`, `/favorites`, `/groups`) to the backend.
 
-`vite.config.js` (project root) forwards API requests (`/auth`, `/movies`, `/series`, `/reviews`, `/favorites`, `/groups`) to the backend. Because of this, detail page paths use singular words (`/movie`, `/serie`).
+Detail page paths use singular words (`/movie`, `/serie`), because the plural paths (`/movies`, `/series`) are forwarded to the backend by the Vite proxy.
 
-## 2. Pages
+## 2. Login handling
 
-| Path | File |
+| File | Purpose |
 |---|---|
-| / | pages/Home.jsx |
-| /movies | pages/movies/Movies.jsx |
-| /movie/:movieId | pages/movies/Moviepage.jsx |
-| /series | pages/series/Series.jsx |
-| /serie/:seriesId | pages/series/seriePage.jsx |
-| /genres | pages/genres/Genres.jsx |
-| /search | pages/Search.jsx |
-| /reviews | pages/reviews/Reviews.jsx |
-| /favorites | pages/favorites/UserFavorites.jsx |
-| /shared/favorites/:userId | pages/favorites/SharedFavorites.jsx |
-| /groups | pages/groups/Groups.jsx |
-| /group/:id | pages/groups/GroupDetails.jsx |
-| /group/:id/requests | pages/groups/GroupRequests.jsx |
-| /login | pages/Login.jsx |
-| /register | pages/Register.jsx |
-| * | pages/NotFound.jsx |
+| api/tokenStore.js | Keeps the access token in memory (not in localStorage) |
+| api/axiosSetup.js | Adds the token to every request automatically. If the backend returns 401, gets a new token with the refresh token cookie and retries the request |
+| context/AuthContext.jsx | Provides `user`, `login` and `logout` to all components through `useAuth()`. `user` is `null` when logged out. Restores the session on page load |
 
-## 3. Features and components
+## 3. Pages
+
+| Path | File | Login required |
+|---|---|---|
+| / | pages/Home.jsx | No |
+| /movies | pages/movies/Movies.jsx | No |
+| /movie/:movieId | pages/movies/Moviepage.jsx | No |
+| /series | pages/series/Series.jsx | No |
+| /serie/:seriesId | pages/series/seriePage.jsx | No |
+| /genres | pages/genres/Genres.jsx | No |
+| /search | pages/Search.jsx | No |
+| /reviews | pages/reviews/Reviews.jsx | No |
+| /favorites | pages/favorites/UserFavorites.jsx | Yes |
+| /shared/favorites/:userId | pages/favorites/SharedFavorites.jsx | No |
+| /groups | pages/groups/Groups.jsx | No |
+| /group/:id | pages/groups/GroupDetails.jsx | Yes, members only |
+| /group/:id/requests | pages/groups/GroupRequests.jsx | Yes, owner only |
+| /login | pages/Login.jsx | No |
+| /register | pages/Register.jsx | No |
+| * | pages/NotFound.jsx | No |
+
+## 4. Features and files
 
 Feature IDs follow the work instruction. File paths are relative to `src/`.
 
-| ID | Feature | File | Purpose | API call |
+| ID | Feature | Files | Purpose | API call |
 |---|---|---|---|---|
-| 1 | Responsiveness | index.css, App.css, page-specific .css files | Layout adapts to different screen sizes | – |
+| 1 | Responsiveness | index.css, App.css, pages/groups/GroupDetails.css, pages/groups/GroupRequests.css | Layout adapts to different screen sizes (`@media` rules) | – |
 | 2 | Registration | pages/Register.jsx | Registration form: username, email and password | POST /auth/register |
 | 3 | Login | pages/Login.jsx, context/AuthContext.jsx | Login form. AuthContext stores the logged-in user and the access token | POST /auth/login |
 | 3 | Logout | components/Header.jsx, context/AuthContext.jsx | Logout from the user menu | POST /auth/logout |
 | 3 | Staying logged in | api/axiosSetup.js, api/tokenStore.js | Adds the token to requests and gets a new token when the old one expires | POST /auth/refresh |
 | 4 | Account deletion | components/DeleteAccountButton.jsx | Asks for confirmation, deletes the account, logs out and returns to the front page. Shown in the user menu in `Header.jsx` | DELETE /auth/account |
 | 5 | Search | components/SearchBar.jsx, pages/Search.jsx, components/SearchResults.jsx | Search movies or series by name, type and release year. Results are shown as MovieCard or SerieCard | GET /movies/search, GET /series/search |
-| 5 | Browsing movies | pages/movies/Movies.jsx | Movie lists: popular, top rated, now playing and upcoming | GET /movies/:category |
+| 5 | Browsing movies | pages/movies/Movies.jsx, components/MovieCard.jsx | Movie lists: popular, top rated, now playing and upcoming | GET /movies/:category |
 | 5 | Movie detail page | pages/movies/Moviepage.jsx | Movie details with cast | GET /movies/:movieId |
 | 6 | Now in theaters | components/MovieCarousel.jsx | Carousel on the front page (`Home.jsx`) showing movies now playing in Finland | GET /movies/now-playing |
 | 7 | Group list and creation | pages/groups/Groups.jsx, components/CreateGroupForm.jsx | Lists all groups. Logged-in users can create a new group | GET /groups, POST /groups |
@@ -71,6 +77,10 @@ Feature IDs follow the work instruction. File paths are relative to `src/`.
 | 15 | Free-choice feature: series | pages/series/Series.jsx, pages/series/seriePage.jsx, components/serieCard/SerieCard.jsx | Series lists (popular, top rated, airing today, on the air) and series detail page with cast | GET /series/:category, GET /series/:seriesId |
 | 15 | Free-choice feature: genres | pages/genres/Genres.jsx, pages/movies/Movies.jsx | Genre page. Choosing a genre opens the movie list filtered by that genre | GET /movies/by-genre |
 
-## 4. User interface design
+API calls are described in detail in the [Backend README](../server/README.md).
+
+## 5. User interface design
 
 The user interface was designed with Penpot.
+
+[Insert Penpot wireframes here]
