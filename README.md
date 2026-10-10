@@ -68,3 +68,9 @@ Functionality of the app includes several features including the following:
 ## 7. Database Class Diagram
 
 ## 8. User Interface Design
+
+## Documentation
+
+- [Frontend](src/README.md) – React structure, pages and components
+- [Backend](server/README.md) – folder structure, REST API and tests
+- [Database](server/db/README.md) – tables and class diagram
