@@ -40,6 +40,13 @@ export async function getMovieReviews(req, res, next) {
   try {
     const movieId = Number(req.params.movieId)
 
+    // movie id must be a positive integer
+    if (movieId <1 || !Number.isInteger(movieId)) {
+      return res.status(400).json({
+        error: "Invalid movie ID"
+      })
+    }
+
     const reviews = await getReviewsByMovie(movieId)
 
     res.status(200).json(reviews)

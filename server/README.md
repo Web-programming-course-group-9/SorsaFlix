@@ -131,7 +131,7 @@ None of the series routes require login.
 |---|---|---|---|
 | POST /reviews | Yes | Body: `{ "movieId", "reviewText", "stars" }` | 201: created review. 400: field missing or stars not between 1 and 5. 401: token missing or invalid |
 | GET /reviews | No | – | 200: all reviews, newest first, with `username` |
-| GET /reviews/movie/:movieId | No | URL: TMDB movie id | 200: `[ { id, movie_id, review_text, stars, created_at, username } ]`, newest first. Empty list `[]` if there are no reviews |
+| GET /reviews/movie/:movieId | No | URL: TMDB movie id | 200: `[ { id, movie_id, review_text, stars, created_at, username } ]`, newest first. Empty list `[]` if there are no reviews. 400: invalid movie id
 | GET /reviews/:id | No | URL: review id | 200: one review. 404: review not found |
 | DELETE /reviews/:id | Yes | URL: review id | 200: `{ message }`. 401: token missing or invalid. 404: review not found or not the user's own review |
 
@@ -173,4 +173,4 @@ Run the tests in the `server` folder with `npm test`. The backend must be runnin
 | authRouter.test.js | Refresh token | 200, a new token and a new cookie with a valid cookie. 401 without a cookie, with an invalid token or with an already used token |
 | authRouter.test.js | Account deletion | 401 without a token. Account is deleted with a valid token |
 | movieRouter.test.js | Movie routes | Now playing returns movies. Search returns results. 400 when `query` is missing. Search works when `year` is empty |
-| reviewRouter.test.js | Review routes | Returns a list of reviews for a movie. Returns an empty list for a movie with no reviews |
+| reviewRouter.test.js | Review routes | Returns a list of reviews for a movie. Returns an empty list for a movie with no reviews. 400 when the movie id is not a valid number |
