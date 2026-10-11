@@ -5,22 +5,21 @@ import "./MovieCarousel.css"
 
 function MovieCarousel() {
   const carouselRef = useRef(null)
+  const itemRefs = useRef([])
 
   const [movies, setMovies] = useState([])
   const [activeIndex, setActiveIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
+  // Load movies
   useEffect(() => {
     async function fetchMovies() {
       try {
         const response = await axios.get("/movies/now-playing")
-
-        setMovies(
-          response.data.filter((movie) => movie.poster_path)
-        )
-      } catch (error) {
-        console.error(error)
+        setMovies(response.data.filter((movie) => movie.poster_path))
+      } catch (err) {
+        console.error(err)
         setError("Failed to load movies.")
       } finally {
         setLoading(false)
@@ -30,49 +29,35 @@ function MovieCarousel() {
     fetchMovies()
   }, [])
 
-  const scrollRight = () => {
+  // Keep the active movie centered whenever it changes
+  useEffect(() => {
     const carousel = carouselRef.current
-    const item = carousel?.querySelector(".item")
-
+    const item = itemRefs.current[activeIndex]
     if (!carousel || !item) return
 
-    carousel.scrollLeft += item.clientWidth + 25
+    const left =
+      item.offsetLeft - carousel.clientWidth / 2 + item.offsetWidth / 2
 
-    setActiveIndex((current) =>
-      Math.min(current + 1, movies.length - 1)
-    )
-  }
+    carousel.scrollTo({ left, behavior: "smooth" })
+  }, [activeIndex, movies])
 
-  const scrollLeft = () => {
-    const carousel = carouselRef.current
-    const item = carousel?.querySelector(".item")
+  const goNext = () =>
+    setActiveIndex((current) => Math.min(current + 1, movies.length - 1))
 
-    if (!carousel || !item) return
+  const goPrev = () =>
+    setActiveIndex((current) => Math.max(current - 1, 0))
 
-    carousel.scrollLeft -= item.clientWidth + 25
-
-    setActiveIndex((current) =>
-      Math.max(current - 1, 0)
-    )
-  }
-
-  if (loading) {
-    return <p className="carousel-message">Loading movies...</p>
-  }
-
-  if (error) {
-    return <p className="carousel-message">{error}</p>
-  }
-
-  if (movies.length === 0) {
+  if (loading) return <p className="carousel-message">Loading movies...</p>
+  if (error) return <p className="carousel-message">{error}</p>
+  if (movies.length === 0)
     return <p className="carousel-message">No movies found.</p>
-  }
 
   return (
     <div className="carousel-wrapper">
       <button
         className="left"
-        onClick={scrollLeft}
+        onClick={goPrev}
+        disabled={activeIndex === 0}
         aria-label="Previous movie"
       >
         ‹
@@ -81,10 +66,10 @@ function MovieCarousel() {
       <div className="carousel" ref={carouselRef}>
         {movies.map((movie, index) => (
           <div
-            className={`item ${
-              index === activeIndex ? "active" : ""
-            }`}
             key={movie.id}
+            ref={(el) => (itemRefs.current[index] = el)}
+            className={`item ${index === activeIndex ? "active" : ""}`}
+            onClick={() => setActiveIndex(index)}
           >
             <MovieCard movie={movie} />
           </div>
@@ -93,7 +78,8 @@ function MovieCarousel() {
 
       <button
         className="right"
-        onClick={scrollRight}
+        onClick={goNext}
+        disabled={activeIndex === movies.length - 1}
         aria-label="Next movie"
       >
         ›
