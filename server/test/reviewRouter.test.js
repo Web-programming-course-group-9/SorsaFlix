@@ -27,6 +27,19 @@ describe('Review Router', () => {
 
         // response should be an empty array
         expect(data).to.be.an('array')
+        expect(data).to.have.lengthOf(0)
+    })
+
+    // test that invalid movie id is rejected
+    it('should return 400 when movie id is not a valid number', async () => {
+        const res = await fetch('http://localhost:3000/reviews/movie/abc')
+        const data = await res.json()
+
+        // route should respond with HTTP 400 Bad Request
+        expect(res.status).to.equal(400)
+
+        // response should contain an error message
+        expect(data).to.have.property('error')
     })
 })
 
