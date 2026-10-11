@@ -20,3 +20,17 @@
 .favorite-remove-button:hover {
     background: rgba(255, 255, 255, 0.08);
 }
+/*MOBILE RESPONSIVITY */
+
+@media (max-width: 600px) {
+  .favorite-item {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .favorite-remove-button {
+    max-width: 100%;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}

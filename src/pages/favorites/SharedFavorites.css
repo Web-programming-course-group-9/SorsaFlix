@@ -24,3 +24,14 @@
   aspect-ratio: 2 / 3;
   object-fit: cover;
 }
+
+/* MOBILE RESPONSIVITY */
+.shared-favorites-page { padding: clamp(16px, 3vw, 40px); }
+.shared-favorites-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: clamp(12px, 2vw, 30px);
+  width: 100%;
+}
+.shared-favorites-grid .movie-card,
+.shared-favorites-grid .movie-poster { min-width: 0; width: 100%; }
+.shared-favorites-grid .movie-poster { display: block; height: auto; }
