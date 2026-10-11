@@ -117,3 +117,48 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+/* GLOBAL RESPONSIVE BASE */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  width: 100%;
+}
+
+#root {
+  width: 100%;
+  max-width: 1400px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+img,
+video {
+  max-width: 100%;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+h2 {
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    margin: 20px 0;
+  }
+}

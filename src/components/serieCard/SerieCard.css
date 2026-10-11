@@ -26,3 +26,18 @@
   text-decoration: none;
   color: inherit;
 }
+/* MOBILE RESPONSIVITY */
+.serie-card { min-width: 0; }
+.serie-grid .serie-card { width: 100%; }
+.serie-grid .serie-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .serie-card:hover .serie-poster { transform: none; }
+  .serie-title { font-size: 0.95rem; }
+}
