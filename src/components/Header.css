@@ -19,7 +19,7 @@
   box-sizing: border-box;
 
   /* frosted glass */
-  background: rgba(15, 23, 32, 0.72);
+  background: rgba(12, 20, 22, 0.72);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   backdrop-filter: blur(14px) saturate(160%);
 
