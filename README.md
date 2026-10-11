@@ -30,7 +30,7 @@ Functionality of the app includes several features including the following:
 
 | ID  | Feature                    | Status  |
 |:---:|:---------------------------|:-------:|
-| 1   | Responsiveness             | ⬜      |
+| 1   | Responsiveness             | ✅     |
 | 2   | Registration               | ✅      |
 | 3   | Login                      | ✅      |
 | 4   | Account deletion           | ✅      |

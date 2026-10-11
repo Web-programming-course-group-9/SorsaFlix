@@ -94,3 +94,11 @@
     flex: 1;
   }
 }
+/* MOBILE RESPONSIVITY */
+.group-requests-page { width: 100%; box-sizing: border-box; padding: clamp(20px, 4vw, 40px) clamp(16px, 3vw, 20px); }
+.request-username { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .request-card { flex-direction: column; align-items: stretch; }
+  .request-actions { width: 100%; flex-wrap: wrap; }
+  .request-actions button { flex: 1; min-height: 42px; }
+}
