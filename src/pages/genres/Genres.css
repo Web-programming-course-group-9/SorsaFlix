@@ -38,3 +38,11 @@
   text-align: center;
   color: white;
 }
+/* MOBILE RESPONSIVITY */
+.genre-page { padding: clamp(16px, 3vw, 40px); }
+.genre-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: clamp(12px, 2vw, 25px);
+  width: 100%;
+}
+.genre-card { min-width: 0; min-height: clamp(100px, 12vw, 140px); padding: clamp(14px, 2vw, 20px); }

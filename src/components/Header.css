@@ -233,39 +233,33 @@
 }
 
 
-/* MOBILE */
-
-@media (max-width: 640px) {
-  .header {
-    flex-direction: column;
-    gap: 8px;
-    padding-block: 10px;
-  }
-
-  .logo {
-    height: 80px;
-  }
-
-  .header-nav {
-    justify-content: center;
-  }
-
-  .nav-button {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
+/* MOBILE RESPONSIVITY */
+@media (max-width: 900px) {
+  .header-nav { min-width: 0; max-width: 100%; }
+  .header { gap: 12px; }
 }
 
+@media (max-width: 640px) {
+  .header { gap: 8px; padding-block: 10px; padding-inline: 12px; }
+  /* Logo size and placement intentionally remain unchanged. */
+  .header-nav { justify-content: center; gap: 4px; }
+  .nav-button { padding: 8px 10px; font-size: 0.85rem; }
+  .header-nav > .nav-button:last-child { margin-left: 0; padding-inline: 12px; }
+  .user-menu { margin-left: 0; }
+  .user-menu > button { padding: 8px 10px; font-size: 0.85rem; }
+  .dropdown { max-width: calc(100vw - 24px); }
+}
+
+@media (max-width: 380px) {
+  .header-nav { gap: 2px; }
+  .nav-button { padding-inline: 7px; font-size: 0.76rem; }
+}
 
 /* REDUCED MOTION */
-
 @media (prefers-reduced-motion: reduce) {
   .nav-button,
   .user-menu > button,
   .dropdown,
   .dropdown button,
-  .dropdown a {
-    transition: none;
-    animation: none;
-  }
+  .dropdown a { transition: none; animation: none; }
 }

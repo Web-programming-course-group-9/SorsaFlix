@@ -26,6 +26,7 @@
   text-decoration: none;
   color: inherit;
 }
+
 /* MOBILE RESPONSIVITY */
 .serie-card { min-width: 0; }
 .serie-grid .serie-card { width: 100%; }

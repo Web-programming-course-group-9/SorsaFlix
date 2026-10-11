@@ -23,3 +23,12 @@
   aspect-ratio: 2 / 3;
   object-fit: cover;
 }
+/* MOBILE RESPONSIVITY START */
+.movies-page { padding: clamp(16px, 3vw, 40px); }
+.movies-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: clamp(12px, 2vw, 30px);
+  width: 100%;
+}
+.movies-grid .movie-card { min-width: 0; }
+.movies-grid .movie-poster { display: block; height: auto; }
