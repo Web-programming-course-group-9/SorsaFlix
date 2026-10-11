@@ -1,25 +1,31 @@
 .movie-card {
   width: 180px;
+  transition: transform 0.2s ease; /* CHANGED: the card scales, not the poster */
+  position: relative;
 }
 
 .movie-poster {
+  display: block; /* NEW: removes the small gap under the image */
   width: 180px;
   height: 270px;
   object-fit: cover;
   border-radius: 8px;
-  transition: transform 0.2s ease;
+  /* CHANGED: removed the transition, the poster no longer scales by itself */
 }
 
 .movie-title {
   font-size: 18px;
+  margin: 12px 0 0; /* NEW: pushes the name down. */
 }
 
 .movie-rating {
   margin-top: 5px;
 }
 
-.movie-card:hover .movie-poster {
+/* CHANGED: the whole card (poster + name + rating) grows together */
+.movie-card:hover {
   transform: scale(1.2);
+  z-index: 5; /* stays above neighbouring cards */
 }
 
 .movie-card-link {
@@ -47,6 +53,6 @@
 }
 
 @media (max-width: 600px) {
-  .movie-card:hover .movie-poster { transform: none; }
+  .movie-card:hover { transform: none; }
   .movie-title { font-size: 0.95rem; }
 }
