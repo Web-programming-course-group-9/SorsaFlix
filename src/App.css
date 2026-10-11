@@ -326,3 +326,47 @@
   text-align: center;
   margin: 40px;
 }
+/* GENERAL PAGE LAYOUT */
+
+.page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 50px 80px;
+  box-sizing: border-box;
+}
+
+/* HOME */
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movie-section {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.movie-section h1 {
+  margin-bottom: 40px;
+}
+
+/* Make content breathe on smaller screens */
+
+@media (max-width: 1024px) {
+  .page {
+    padding: 30px 25px 60px;
+  }
+
+  .movie-section {
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 25px 15px 50px;
+  }
+}

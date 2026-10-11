@@ -1,0 +1,36 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 45px auto;
+}
+
+.search-input {
+  flex: 1;
+  height: 45px;
+  padding: 0 90px;
+  box-sizing: border-box;
+}
+
+.search-year {
+  width: 120px;
+  height: 45px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.search-type {
+  width: 120px;
+  height: 45px;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.search-button {
+  height: 45px;
+  padding: 0 24px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
