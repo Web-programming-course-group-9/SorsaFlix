@@ -99,6 +99,14 @@ router.get("/top-rated", async (req, res, next) => {
     next(error)
   }
 })
+
+
+
+// Earliest year that makes sense for a movie (first films were made around 1888)
+const MIN_MOVIE_YEAR = 1888
+// Allow a few years into the future because upcoming movies are announced early
+const MAX_YEARS_AHEAD = 5
+
 // GET /movies/search?query=...
 // Searches TMDB for movies matching the given query string.
 router.get("/search", async (req, res, next) => {
@@ -108,6 +116,22 @@ router.get("/search", async (req, res, next) => {
     if (!query || !query.trim()) {
         return res.status(400).json({ error: "Query parameter 'query' is required" })
     }
+    //Validating that year input is valid number
+    let validYear = undefined
+    if (year !== undefined && year !== "") {
+      if (typeof year !== "string" || !/^\d{4}$/.test(year)) {
+        return res.status(400).json({ error: "Query parameter 'year' must be a 4-digit year"})
+      }  
+      validYear = Number(year)
+      const maxYear = new Date().getFullYear() + MAX_YEARS_AHEAD
+
+      if (validYear < MIN_MOVIE_YEAR || validYear > maxYear) {
+        return res.status(400).json({
+            error: `Query parameter 'year' must be between ${MIN_MOVIE_YEAR} and ${maxYear}`
+        })
+      }
+    }
+
 
     try {
         const response = await axios.get('https://api.themoviedb.org/3/search/movie', {
@@ -116,9 +140,10 @@ router.get("/search", async (req, res, next) => {
             },
             params: {
                 query,
+                page,
                 region: "FI",
                 language: "fi-FI",
-                primary_release_year: year || undefined,
+                primary_release_year: validYear,
             }
         })
         res.status(200).json(response.data.results)
