@@ -171,3 +171,30 @@
 .add-to-group span {
   margin-left: 6px;
 }
+/* MOBILE RESPONSIVITY */
+.movie-backdrop { height: clamp(240px, 40vw, 500px); }
+.movie-banner-title { left: clamp(16px, 4vw, 40px); right: 16px; bottom: clamp(16px, 4vw, 40px); font-size: clamp(1.5rem, 5vw, 3rem); overflow-wrap: anywhere; }
+.movie-content { gap: clamp(20px, 3vw, 30px); padding: clamp(20px, 3vw, 30px) clamp(16px, 4vw, 40px); }
+.movie-poster-large { max-width: 100%; height: auto; align-self: flex-start; }
+.movie-cast-section { padding-inline: clamp(16px, 4vw, 40px); }
+.favorite-button:hover,
+.favorite-button:focus-visible { transform: scale(1.15); }
+.review-form { width: calc(100% - 32px); padding: clamp(16px, 4vw, 30px); }
+.review-form h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+.review-form label { font-size: 1rem; }
+.review-form textarea { min-width: 0; }
+
+@media (max-width: 600px) {
+  .movie-content { flex-direction: column; align-items: center; text-align: center; }
+  .movie-poster-large { width: min(55%, 200px); align-self: center; }
+  .movie-info { width: 100%; overflow-wrap: anywhere; }
+  .movie-meta { line-height: 1.6; }
+  .movie-overview { max-width: 100%; }
+  .movie-cast { grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); }
+  .add-to-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 0; }
+  .add-to-group select,
+  .add-to-group button,
+  .add-to-group span { margin-left: 0; max-width: 100%; }
+  .review-form { margin-block: 28px; }
+  .review-form button { max-width: 100%; }
+}

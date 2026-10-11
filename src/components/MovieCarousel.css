@@ -1,22 +1,85 @@
-/* --- Carousel hover/click behaviour --- */
-
-/* Non-active cards: no hover zoom, and not clickable.
-   pointer-events: none blocks clicks AND hover on them. */
-.carousel .item:not(.active) .movie-card-link {
-  pointer-events: none;
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
 }
 
-/* Non-active cards: kill the hover zoom even if hovered */
-.carousel .item:not(.active) .movie-poster {
-  transform: none;
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  padding: 50px 80px;
 }
 
-/* Optional: dim the non-active cards so the active one stands out */
-.carousel .item:not(.active) {
-  opacity: 0.5;
-  transition: opacity 0.2s ease;
+.item {
+  flex: 0 0 180px;
+  width: 180px;
+  opacity: 0.6;
+  transform: scale(0.85);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 1;
 }
 
-.carousel .item.active {
-  opacity: 1;
+.item.active { transform: scale(1.2); opacity: 1; z-index: 2; }
+.movie-card { width: 180px; }
+.movie-poster { width: 180px; height: 270px; object-fit: cover; display: block; border-radius: 8px; }
+.movie-info { margin-top: 10px; }
+.movie-title { margin: 0; font-size: 18px; }
+.movie-rating { margin-top: 5px; }
+
+.left,
+.right {
+  position: absolute;
+  z-index: 10;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+.left { left: 10px; }
+.right { right: 10px; }
+.left:hover,
+.right:hover { background: rgba(255, 255, 255, 0.35); }
+.carousel-message { text-align: center; margin: 40px; }
+
+/* CAROUSEL BEHAVIOR */
+.carousel .item:not(.active) .movie-card-link { pointer-events: none; }
+.carousel .item:not(.active) .movie-poster { transform: none; }
+.carousel .item:not(.active) { opacity: 0.5; transition: opacity 0.2s ease; }
+.carousel .item.active { opacity: 1; }
+
+/* MOBILE RESPONSIVITY */
+.carousel-wrapper { min-width: 0; }
+.carousel { gap: clamp(10px, 2vw, 25px); padding: 40px clamp(24px, 6vw, 80px); min-width: 0; }
+.carousel .item { flex-basis: clamp(120px, 18vw, 180px); width: auto; min-width: 0; }
+.carousel .movie-card { width: 100%; }
+.carousel .movie-poster { width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover; }
+
+@media (max-width: 600px) {
+  .carousel { gap: 10px; padding: 28px 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+  .carousel .item { flex-basis: 125px; scroll-snap-align: center; }
+  .carousel .item.active { transform: scale(1.05); }
+  .left,
+  .right { width: 34px; height: 34px; font-size: 25px; }
+  .left { left: 2px; }
+  .right { right: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel { scroll-behavior: auto; }
+  .carousel .item { transition: none; }
 }

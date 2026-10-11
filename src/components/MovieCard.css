@@ -26,3 +26,27 @@
   text-decoration: none;
   color: inherit;
 }
+/* MOBILE RESPONSIVITY */
+/* Flexible sizing applies when the card is inside a responsive grid. */
+.movies-grid .movie-card,
+.search-results-grid .movie-card,
+.shared-favorites-grid .movie-card,
+.groups-grid .movie-card,
+.group-movie-grid .movie-card { width: 100%; min-width: 0; }
+
+.movies-grid .movie-poster,
+.search-results-grid .movie-poster,
+.shared-favorites-grid .movie-poster,
+.groups-grid .movie-poster,
+.group-movie-grid .movie-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .movie-card:hover .movie-poster { transform: none; }
+  .movie-title { font-size: 0.95rem; }
+}

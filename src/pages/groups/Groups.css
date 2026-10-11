@@ -38,3 +38,14 @@
   padding: 12px 0;
   border-bottom: 1px solid #444;
 }
+/*MOBILE RESPONSIVITY*/
+.groups-page { padding: clamp(16px, 3vw, 40px); }
+.groups-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: clamp(12px, 2vw, 30px);
+  width: 100%;
+}
+.groups-grid .movie-card,
+.groups-grid .movie-poster { min-width: 0; width: 100%; }
+.groups-grid .movie-poster { display: block; height: auto; }
+.group-item { flex-wrap: wrap; overflow-wrap: anywhere; }

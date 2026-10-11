@@ -5,3 +5,9 @@
   max-width: 1200px;
   margin: 40px auto;
 }
+/* MOBILE RESPONSIVITY */
+.search-results-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  gap: clamp(12px, 2vw, 30px);
+  width: calc(100% - 32px);
+}
