@@ -8,7 +8,7 @@
 
 .series-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 30px;
   max-width: 1200px;
   margin: 40px auto;
@@ -16,10 +16,48 @@
 
 .series-grid .movie-card {
   width: 100%;
+  min-width: 0;
 }
 
 .series-grid .movie-poster {
+  display: block;
   width: 100%;
+  height: auto;
   aspect-ratio: 2 / 3;
   object-fit: cover;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .series-page {
+    padding: 24px;
+  }
+
+  .series-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .series-page {
+    padding: 16px;
+  }
+
+  .series-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 24px auto;
+  }
+
+  .series-grid .movie-card {
+    width: 100%;
+  }
+
+  .series-grid .movie-poster {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+  }
 }
