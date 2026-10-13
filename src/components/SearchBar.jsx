@@ -1,4 +1,5 @@
 import { useState } from "react"
+import "./SearchBar.css"
 
 // Search form: an input field + button
 // Captures what the user types and passes it to the paren via onSearch
@@ -28,22 +29,24 @@ function SearchBar({ onSearch }) {
     return (
         <form onSubmit={handleSubmit}>
             <input
+                className="search-input"
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleInputChange}
             />
             <input
+                className="search-year"
                 type="text"
                 placeholder="Year..."
                 value={year}
                 onChange={handleYearChange}
             />
-            <select value={searchType} onChange={(event) => setSearchType(event.target.value)}>
+            <select className="search-type" value={searchType} onChange={(event) => setSearchType(event.target.value)}>
                 <option value="movie">Movies</option>
                 <option value="tv">Series</option>
             </select>
-            <button type="submit">Search</button>
+            <button className="search-button" type="submit">Search</button>
         </form>
     )
 }

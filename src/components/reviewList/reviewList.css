@@ -47,3 +47,8 @@
   line-height: 1.5;
   margin: 0;
 }
+
+/*  MOBILE RESPONSIVITY */
+.review-list { width: 100%; padding-inline: clamp(12px, 4vw, 40px); }
+.review-item { min-width: 0; overflow-wrap: anywhere; }
+.review-header { flex-wrap: wrap; gap: 8px 12px; }

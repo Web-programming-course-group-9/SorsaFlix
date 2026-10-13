@@ -1,28 +1,58 @@
 .movie-card {
   width: 180px;
+  transition: transform 0.2s ease; /* CHANGED: the card scales, not the poster */
+  position: relative;
 }
 
 .movie-poster {
+  display: block; /* NEW: removes the small gap under the image */
   width: 180px;
   height: 270px;
   object-fit: cover;
   border-radius: 8px;
-  transition: transform 0.2s ease;
+  /* CHANGED: removed the transition, the poster no longer scales by itself */
 }
 
 .movie-title {
   font-size: 18px;
+  margin: 12px 0 0; /* NEW: pushes the name down. */
 }
 
 .movie-rating {
   margin-top: 5px;
 }
 
-.movie-card:hover .movie-poster {
+/* CHANGED: the whole card (poster + name + rating) grows together */
+.movie-card:hover {
   transform: scale(1.2);
+  z-index: 5; /* stays above neighbouring cards */
 }
 
 .movie-card-link {
   text-decoration: none;
   color: inherit;
+}
+/* MOBILE RESPONSIVITY */
+/* Flexible sizing applies when the card is inside a responsive grid. */
+.movies-grid .movie-card,
+.search-results-grid .movie-card,
+.shared-favorites-grid .movie-card,
+.groups-grid .movie-card,
+.group-movie-grid .movie-card { width: 100%; min-width: 0; }
+
+.movies-grid .movie-poster,
+.search-results-grid .movie-poster,
+.shared-favorites-grid .movie-poster,
+.groups-grid .movie-poster,
+.group-movie-grid .movie-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+  .movie-card:hover { transform: none; }
+  .movie-title { font-size: 0.95rem; }
 }
