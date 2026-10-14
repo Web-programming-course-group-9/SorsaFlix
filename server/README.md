@@ -162,6 +162,13 @@ None of the series routes require login.
 
 ## 6. Tests
 
+### Run inside the docker container
+`docker exec <container-name> npm test`
+
+
+### Runtest on host locally
+Running the tests locally requires the environmental variables DATABASE_URL, TMDB_TOKEN and JWT_SECRET to be set in .env file in the server folder.  
+
 Run the tests in the `server` folder with `npm test`. The backend must be running.
 
 | File | Test group | Tests |
