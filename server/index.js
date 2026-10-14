@@ -2,9 +2,13 @@
 
 import express from "express"
 import movieRouter from "./routes/movieRouter.js"
-import authRouter from "./authRouter.js"
+import authRouter from "./routes/authRouter.js"
 import serieRouter from "./routes/serieRouter.js"
+import reviewRouter from "./routes/reviewRouter.js"
+import favoriteRouter from "./routes/favoriteRouter.js"
+import groupRouter from "./routes/groupRouter.js"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
@@ -20,11 +24,12 @@ app.use(cors({
         } else {
             callback(new Error("Not allowed by CORS"))
         }
-    }
+    },
+    credentials: true
 }))    
 
 
-//app.use(cors({ origin: "http://localhost:5173" }))
+app.use(cookieParser())
 app.use(express.json())
 app.use("/auth", authRouter)
 
@@ -41,6 +46,15 @@ app.use("/movies", movieRouter)
 
 // All serie routes are handled under /series
 app.use("/series", serieRouter)
+
+// ALL reviews routes are handled under /reviews
+app.use("/reviews", reviewRouter)
+
+// All favorite routes are handled under /favorites
+app.use("/favorites", favoriteRouter)
+
+// All group routes are handled under /groups
+app.use("/groups", groupRouter)
 
 // Start the server and listen on the port
 app.listen(PORT, () => {

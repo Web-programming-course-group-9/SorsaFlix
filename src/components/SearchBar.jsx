@@ -1,4 +1,5 @@
 import { useState } from "react"
+import "./SearchBar.css"
 
 // Search form: an input field + button
 // Captures what the user types and passes it to the paren via onSearch
@@ -7,6 +8,8 @@ function SearchBar({ onSearch }) {
     const [searchTerm, setSearchTerm] = useState("")
     // Holds current text in the year field
     const [year, setYear] = useState("")
+    // Holds current search type (movie or tv)
+    const [searchType, setSearchType] = useState("movie")
 
     // Update the searchTerm state when the user types in the input field
     const handleInputChange = (event) => {
@@ -20,24 +23,30 @@ function SearchBar({ onSearch }) {
     // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault() // Prevent page reload
-        onSearch({ query: searchTerm, year: year }) // pass the typed term to the parent
+        onSearch({ query: searchTerm, year: year, type: searchType }) // pass the typed term to the parent
     }
   
     return (
         <form onSubmit={handleSubmit}>
             <input
+                className="search-input"
                 type="text"
                 placeholder="Search..."
                 value={searchTerm}
                 onChange={handleInputChange}
             />
             <input
+                className="search-year"
                 type="text"
                 placeholder="Year..."
                 value={year}
                 onChange={handleYearChange}
             />
-            <button type="submit">Search</button>
+            <select className="search-type" value={searchType} onChange={(event) => setSearchType(event.target.value)}>
+                <option value="movie">Movies</option>
+                <option value="tv">Series</option>
+            </select>
+            <button className="search-button" type="submit">Search</button>
         </form>
     )
 }

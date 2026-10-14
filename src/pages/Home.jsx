@@ -1,39 +1,32 @@
-import { useState } from "react"
-import api from "../api/axios"
 import SearchBar from "../components/SearchBar"
-import SearchResults from "../components/SearchResults"
 import MovieCarousel from "../components/MovieCarousel"
+import { useNavigate } from "react-router-dom"
 
 function Home() {
   // holds the search results
-  const [searchResults, setSearchResults] = useState([])
+  const navigate = useNavigate()
 
-  // Runs when the user submits a search term
-  // Receives the search term from the SearchBar component
+ // send ssearch to the /search page with URL params
   const handleSearch = async (searchValues) => {
     // Ignore empty searches
     if (!searchValues.query.trim()) {
       return
     }
-    try {
-      // Calls GET http://localhost:3000/movies/search?query=<searchTerm>
-      const response = await api.get("/search", {
-        params: { 
+
+      const params = new URLSearchParams({
           query: searchValues.query,
-          year: searchValues.year || undefined,
-        },
-      })
-      setSearchResults(response.data)
-    } catch (error) {
-      console.error("Search failed:", error)
+          type: searchValues.type,
+        })
+      if (searchValues.year) {
+        params.set("year", searchValues.year)
+      }
+      navigate("/search?" + params.toString())
     }
-  }
+  
   return (
     <main className="page home-page">
 
       <SearchBar onSearch={handleSearch} />
-
-      <SearchResults results={searchResults} />
 
       <section className="movie-section">
 

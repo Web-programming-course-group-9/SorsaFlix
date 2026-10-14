@@ -1,0 +1,200 @@
+/* Whole page: dark background, readable text, centered column */
+.movie-page {
+  background-color: #0f0f0f;
+  color: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* Banner wrapper — the backdrop sits here, title is placed on top */
+.movie-banner {
+  position: relative;
+}
+
+/* Backdrop image fills the width, fixed height, cropped nicely */
+.movie-backdrop {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Dark gradient over the backdrop so the title stays readable.
+   It sits between the image and the title. */
+.movie-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(15, 15, 15, 0.9) 0%,
+    rgba(15, 15, 15, 0.3) 60%,
+    rgba(15, 15, 15, 0) 100%
+  );
+}
+
+/* Title on top of the banner, bottom-left, above the gradient */
+.movie-banner-title {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  z-index: 1;
+  font-size: 3rem;
+  margin: 0;
+}
+
+/* Content row: poster + info side by side */
+.movie-content {
+  display: flex;
+  gap: 30px;
+  padding: 30px 40px;
+}
+
+/* Info column: keep text left-aligned */
+.movie-info {
+    text-align: left;
+}
+
+/* Poster fixed width so it doesn't stretch */
+.movie-poster-large {
+  width: 250px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* Meta line (year · runtime · rating) */
+.movie-meta {
+  color: #cccccc;
+  font-size: 1rem;
+}
+
+/* Genres in a lighter grey */
+.movie-genres {
+  color: #999999;
+}
+
+/* Overview text, easier to read with some line height */
+.movie-overview {
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+/* Cast section spacing */
+.movie-cast-section {
+  padding: 0 40px;
+}
+
+/* Cast as a clean grid, not a bullet list */
+.movie-cast {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.movie-cast li {
+  background-color: #1a1a1a;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+.review-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.review-form h2 {
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+.review-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.review-form select,
+.review-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  padding: 12px;
+  font: inherit;
+  border-radius: 8px;
+}
+
+.review-form textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.review-form button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.favorite-button{
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1.0rem;
+  color: #e25555;
+  font-size: 2.0rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform;
+}
+
+.favorite-button:hover,
+.favorite-button:focus-visible{
+  transform: scale(2);
+}
+
+/* Space between the heart and the "Add to group" menu */
+.add-to-group {
+  margin-left: 16px;
+}
+
+/* Small gap between dropdown, button and message */
+.add-to-group select,
+.add-to-group button,
+.add-to-group span {
+  margin-left: 6px;
+}
+/* MOBILE RESPONSIVITY */
+.movie-backdrop { height: clamp(240px, 40vw, 500px); }
+.movie-banner-title { left: clamp(16px, 4vw, 40px); right: 16px; bottom: clamp(16px, 4vw, 40px); font-size: clamp(1.5rem, 5vw, 3rem); overflow-wrap: anywhere; }
+.movie-content { gap: clamp(20px, 3vw, 30px); padding: clamp(20px, 3vw, 30px) clamp(16px, 4vw, 40px); }
+.movie-poster-large { max-width: 100%; height: auto; align-self: flex-start; }
+.movie-cast-section { padding-inline: clamp(16px, 4vw, 40px); }
+.favorite-button:hover,
+.favorite-button:focus-visible { transform: scale(1.15); }
+.review-form { width: calc(100% - 32px); padding: clamp(16px, 4vw, 30px); }
+.review-form h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+.review-form label { font-size: 1rem; }
+.review-form textarea { min-width: 0; }
+
+@media (max-width: 600px) {
+  .movie-content { flex-direction: column; align-items: center; text-align: center; }
+  .movie-poster-large { width: min(55%, 200px); align-self: center; }
+  .movie-info { width: 100%; overflow-wrap: anywhere; }
+  .movie-meta { line-height: 1.6; }
+  .movie-overview { max-width: 100%; }
+  .movie-cast { grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); }
+  .add-to-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 0; }
+  .add-to-group select,
+  .add-to-group button,
+  .add-to-group span { margin-left: 0; max-width: 100%; }
+  .review-form { margin-block: 28px; }
+  .review-form button { max-width: 100%; }
+}

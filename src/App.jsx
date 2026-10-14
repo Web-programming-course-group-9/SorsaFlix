@@ -7,12 +7,21 @@ import {
 import Header from "./components/Header"
 
 import Home from "./pages/Home"
-import Movies from "./pages/Movies"
-import Series from "./pages/Series"
-import Groups from "./pages/Groups"
-import Reviews from "./pages/Reviews"
+import Movies from "./pages/movies/Movies"
+import Series from "./pages/series/Series"
+import Groups from "./pages/groups/Groups"
+import Reviews from "./pages/reviews/Reviews"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import Search from "./pages/Search"
+import Moviepage from "./pages/movies/Moviepage"
+import SeriePage from "./pages/series/seriePage"
+import Genres from "./pages/genres/Genres"
+import Favorites from "./pages/favorites/UserFavorites"
+import SharedFavorites from "./pages/favorites/SharedFavorites"
+import GroupDetails from "./pages/groups/GroupDetails"
+import GroupRequests from "./pages/groups/GroupRequests"
+import NotFound from "./pages/NotFound"
 
 import "./App.css"
 
@@ -25,10 +34,19 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/series" element={<Series />} />
+        <Route path="/genres" element={<Genres />} />
         <Route path="/groups" element={<Groups />} />
+        <Route path="/group/:id" element={<GroupDetails />} />
+        <Route path="/group/:id/requests" element={<GroupRequests />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/shared/favorites/:userId" element={<SharedFavorites />} />
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/movie/:movieId" element={<Moviepage />} />
+        <Route path="/serie/:seriesId" element={<SeriePage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

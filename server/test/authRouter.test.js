@@ -1,0 +1,488 @@
+import { expect } from 'chai'
+import { pool } from "../db/index.js"
+import jwt from "jsonwebtoken"
+
+//For register, login and logout tests you must point out to the correct database DATABASE_URL in
+//a .env file in ./server/.env, without that the tests will fail on some parts since these use direct db functionality to
+//remove db entries for test users
+
+//Function that deletes test user by email. we use this after each test
+async function deleteUserByEmail(email) {
+    await pool.query('DELETE FROM users WHERE email = $1', [email])
+}
+
+describe('Register', () => {
+
+    //Define test user for registration testing
+    const testUser = {
+        username: 'registertestuser',
+        email: 'registertest@example.com',
+        password: 'Testpassword1'
+    }
+
+    //Cleanup after the test is done, removes testusers
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+        await deleteUserByEmail('weakpassword@example.com')
+        await deleteUserByEmail('missingfields@example.com')
+    })
+
+    it('it should return 201 and the created user when registration data is valid', async () => {
+        const res = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+        const data = await res.json()
+
+        expect(res.status).to.equal(201)
+        expect(data).to.have.property('username', testUser.username)
+        expect(data).to.have.property('email', testUser.email)
+        expect(data).to.not.have.property('password_hash')
+
+    })
+
+    it('should return 409 when email is already in use', async () => {
+        const res = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...testUser, username: 'someoneelse' })
+        })
+        expect(res.status).to.equal(409)
+    })
+
+    it('should return 400 when password does not meet the requirements', async () => {
+        const res = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: 'weakpassworduser',
+                email: 'weakpassword@example.com',
+                password: 'weak'
+            })
+        })
+        expect(res.status).to.equal(400)
+    })
+
+    it('should return 400 when a required field is missing', async () => {
+        const res = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: 'missingfields@example.com',
+                password: 'Testpassword1'
+            })
+        })
+        expect(res.status).to.equal(400)
+    })
+
+})
+
+
+//Login tests 
+describe('Login', () => {
+
+    //Define test user for login testing
+    const testUser = {
+        username: 'logintestuser',
+        email: 'logintest@example.com',
+        password: 'Testpassword1'
+    }
+
+    // Create the user once before all tests in this block, since every
+    // test here needs the same already-registered user to log in with
+    before(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+
+    it('should return 200 and a token when credentials are correct', async () => {
+        const res = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const data = await res.json()
+
+        expect(res.status).to.equal(200)
+        expect(data).to.have.property('token')
+        expect(data.user).to.have.property('email', testUser.email)
+    })
+
+    it('should return 401 when password is incorrect', async () => {
+        const res = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: 'WrongPassword1'
+            })
+        })
+        expect(res.status).to.equal(401)
+    })
+
+    it('should return 400 when password is missing', async () => {
+        const res = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email
+            })
+        })
+        expect(res.status).to.equal(400)
+    })
+
+})
+
+
+//Logout testing
+describe('Logout', () => {
+
+
+    const testUser = {
+        username: 'logouttestuser',
+        email: 'logouttest@example.com',
+        password: 'Testpassword1'
+    }
+    //Creating a test user before running the tests
+    before(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+    //Cleanup test users after tests are done
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+    //Log in to get a cookie function
+    async function loginAndGetCookie() {
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const setCookieHeader = loginRes.headers.get('set-cookie')
+        return setCookieHeader.split(';')[0]
+    }
+
+    it('should return 204 when a valid refresh token cookie is provided', async () => {
+        const cookie = await loginAndGetCookie()
+
+        const res = await fetch('http://localhost:3000/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+        expect(res.status).to.equal(204)
+    })
+
+
+    it('should invalidate the refresh token so it can no longer be used', async () => {
+        const cookie = await loginAndGetCookie()
+
+        await fetch('http://localhost:3000/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+
+        const refreshRes = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+        expect(refreshRes.status).to.equal(401)
+    })
+})
+
+//Test access token
+describe('Access token', () => {
+
+    const testUser = {
+        username: 'accesstokentestuser',
+        email: 'accesstokentest@example.com',
+        password: 'Testpassword1'
+    }
+
+    let accessToken = ''
+    let userId = null
+
+    //Create the test user and log in once to get a real access token
+    before(async () => {
+        const registerRes = await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+        //Fail early with a clear message if the user could not be created
+        expect(registerRes.status).to.equal(201)
+
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const loginData = await loginRes.json()
+        accessToken = loginData.token
+        userId = loginData.user.id
+    })
+
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+    //Helper: tries to delete the account with the given token
+    //Used here only with tokens that should be rejected
+    async function deleteAccountWithToken(token) {
+        return fetch('http://localhost:3000/auth/account', {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+    }
+
+    it('should contain the user id and username and expire in 15 minutes', () => {
+        const payload = jwt.verify(accessToken, process.env.JWT_SECRET)
+
+        expect(payload).to.have.property('id', userId)
+        expect(payload).to.have.property('username', testUser.username)
+        expect(payload.exp - payload.iat).to.equal(15 * 60)
+    })
+
+    it('should return 401 when the token is not a valid JWT', async () => {
+        const res = await deleteAccountWithToken('thisIsNotAValidToken')
+        expect(res.status).to.equal(401)
+    })
+
+    it('should return 401 when the token has expired', async () => {
+        const expiredToken = jwt.sign(
+            { id: userId, username: testUser.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '-10s' }
+        )
+        const res = await deleteAccountWithToken(expiredToken)
+        expect(res.status).to.equal(401)
+    })
+
+    it('should return 401 when the token is signed with a wrong secret', async () => {
+        const forgedToken = jwt.sign(
+            { id: userId, username: testUser.username },
+            'thisIsTheWrongSecret',
+            { expiresIn: '15m' }
+        )
+        const res = await deleteAccountWithToken(forgedToken)
+        expect(res.status).to.equal(401)
+    })
+
+
+})
+
+//Test refresh token functionality etc
+
+describe('Refresh token', () => {
+
+    const testUser = {
+        username: 'refreshusertestuser',
+        email: 'refreshtest@example.com',
+        password: 'Testpassword1'
+    }
+
+    //Creates test user for each test
+    before(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+
+    //Delete the users after tests are done
+    after(async () => {
+        await deleteUserByEmail(testUser.email)
+    })
+
+    //Login before the test
+    async function loginAndGetCookie() {
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+        const setCookieHeader = loginRes.headers.get('set-cookie')
+        return setCookieHeader.split(';')[0]
+    }
+    //Successful refresh with proper cookie
+    it('should return 200, a new token and a new cookie when the refresh cookie is valid', async () => {
+        const cookie = await loginAndGetCookie()
+
+        const res = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': cookie
+            }
+        })
+        const data = await res.json()
+
+        expect(res.status).to.equal(200)
+        expect(data).to.have.property('token')
+        expect(data.user).to.have.property('email', testUser.email)
+
+        const newCookie = res.headers.get('set-cookie').split(';')[0]
+        expect(newCookie).to.not.equal(cookie)
+    })
+
+    //No cookie
+    it('should return 401 when no refresh cookie is provided', async () => {
+        const res = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST'
+        })
+        expect(res.status).to.equal(401)
+    })
+
+    //Testing invalid token
+    it('should return 401 when the refresh token is not valid', async () => {
+        const res = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': 'refreshToken=ThisisNotAValidToken'
+            }
+        })
+        expect(res.status).to.equal(401)
+    })
+
+    //refresh tokens are single use, so a used token must be rejected
+    it('should return 401 when an already used refresh token is used again', async () => {
+        const oldCookie = await loginAndGetCookie()
+
+        //First use is valid and rotates the token
+        const firstRes = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': oldCookie
+            }
+        })
+        expect(firstRes.status).to.equal(200)
+
+        //Second use of the same old cookie must fail
+        const secondRes = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            headers: {
+                'Cookie': oldCookie
+            }
+        })
+        expect(secondRes.status).to.equal(401)
+    })
+})
+
+
+
+// Test for account deletion
+describe('Account Deletion', () => {
+
+    // Each test creates its own user so the tests can be repeated
+    const testUser = {
+        username: 'deletetestuser',
+        email: 'deletetest@example.com',
+        password: 'Testpassword1'
+    }
+
+    // Register a fresh test user before each test
+    beforeEach(async () => {
+        await fetch('http://localhost:3000/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testUser)
+        })
+    })
+
+    //Delete without a token -> should be rejected (401)
+    it('should return 401 when no token is provided', async () => {
+        const res = await fetch('http://localhost:3000/auth/account', {
+            method: 'DELETE',
+        })
+        expect(res.status).to.equal(401)
+    })
+
+    //Delete with valid token -> should succeed with 200
+    it('should delete the account when valid token is provided', async () => {
+        // log in to get token
+        const loginRes = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: testUser.email,
+                password: testUser.password
+            })
+        })
+
+        const loginData = await loginRes.json()
+        // Use the token to delete the account
+        const res = await fetch('http://localhost:3000/auth/account', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + loginData.token
+            }
+        })
+        expect(res.status).to.equal(200)
+    })
+})
