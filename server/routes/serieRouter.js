@@ -1,7 +1,7 @@
 import { Router } from "express"
 import axios from "axios"
 import "dotenv/config"
-
+import { fetchSerieById } from "../controller/serieController.js"
 const router = Router()
 //GET series  popular
 
